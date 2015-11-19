@@ -96,32 +96,33 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				 <p>If you have previously registered with us, <a href="#">click here</a></p>
 				 <form>
 					 <ul>
-						 <li class="text-info">First Name: </li>
-						 <li><input type="text" value=""></li>
+						 <li class="text-info">Full Name: </li>
+						 <li><input type="text" name='fullName'value=""></li>
 					 </ul>
 					 <ul>
-						 <li class="text-info">Last Name: </li>
-						 <li><input type="text" value=""></li>
+						 <li class="text-info">Login ID: </li>
+						 <li><input type="text" name='loginID' value=""></li>
+						 <!-- <li><button type='submit' name="available">Check Availability</button></li> -->
 					 </ul>				 
 					 <ul>
 						 <li class="text-info">Password: </li>
-						 <li><input type="password" value=""></li>
+						 <li><input type="password" name='pw' value=""></li>
 					 </ul>
 					 <ul>
 						 <li class="text-info">Re-enter Password:</li>
-						 <li><input type="password" value=""></li>
+						 <li><input type="password" name='cfm_pw' value=""></li>
 					 </ul>
 					 <ul>
 					 	<li class="text-info">Major Credit Card Number:</li>
-					 	<li><input type=text pattern="[0-9]{13,16}"></li>
+					 	<li><input type=text pattern="[0-9]{13,16}" name='majorCCN'></li>
 					 </ul>
 					 <ul>
 					 	<li class="text-info">Address:</li>
-					 	<li><input type="text" value=""></li>
+					 	<li><input type="text" name= 'address' value=""></li>
 					 </ul>
 					 <ul>
 						 <li class="text-info">Mobile Number:</li>
-						 <li><input type="text" value=""></li>
+						 <li><input type="text" name='phoneNum' value=""></li>
 					 </ul>						
 					 <input type="submit" value="Register Now">
 					 <p class="click">By clicking this button, you agree to my modern style <a>Pollicy Terms and Conditions</a> to Use</p> 
@@ -130,6 +131,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		 </div>
 		 <div class="col-md-6 reg-right">
 			 <h3>Completely Free Accouent</h3>
+			 <p>Testtts {{fullName}} {{loginID}} {{pw}} {{cfm_pw}}  {{majorCCN}} {{address}} {{phoneNum}} Is name available {{q}}</p>
+			 {% if error %}
+				<p style="color: red;">Some blanks are unfilled or password mismatch.</p>
+			 {% endif %}
 			 <p>Pellentesque neque leo, dictum sit amet accumsan non, dignissim ac mauris. Mauris rhoncus, lectus tincidunt tempus aliquam, odio 
 			 libero tincidunt metus, sed euismod elit enim ut mi. Nulla porttitor et dolor sed condimentum. Praesent porttitor lorem dui, in pulvinar enim rhoncus vitae. Curabitur tincidunt, turpis ac lobortis hendrerit, ex elit vestibulum est, at faucibus erat ligula non neque.</p>
 			 <h3 class="lorem">Lorem ipsum dolor sit amet elit.</h3>
