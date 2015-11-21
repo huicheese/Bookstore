@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<banner>
+	<item image="Flash/Flash Banner/Photos/1.jpg" align="lt" alt="SELECT SLIDE 1" link="Licensing.html" TARGET="_self" >
+		<![CDATA[<font face="Impact" size="24" alt="SELECT SLIDE 1" color='#FFFFFF'></font><br><font face="Myriad Pro" size="14" color='#FFD75F'></font><br><font face="Myriad Pro" size="13" color='#FFFFFF'></font>]]>
+	</item>
+	<item image="Flash/Flash Banner/Photos/2.jpg" align="rb" link="Catalogue.html" TARGET="_self" >
+		<![CDATA[<font face="Impact" size="24" alt="SELECT SLIDE 2" color='#FFFFFF'></font><br><font face="Myriad Pro" size="14" color='#fcb5db'></font><br><font face="Myriad Pro" size="13" color='#FFFFFF'></font>]]>
+	</item>
+	<item image="Flash/Flash Banner/Photos/3.jpg" align="lb" link="ProductPage_Apparels_Shirt1.htm" TARGET="_self" >
+		<![CDATA[<font face="Impact" size="24" alt="SELECT SLIDE 3" color='#faddbf'></font><br><font face="Myriad Pro" size="14" color='#f87a65'></font><br><font face="Myriad Pro" size="13" color='#FFFFFF'></font>]]>
+	</item>
+	<item image="Flash/Flash Banner/Photos/4.jpg" align="rt" link="Licensing.html" TARGET="_self" >
+		<![CDATA[<font face="Impact" size="24" alt="SELECT SLIDE 4" color='#202020'></font><br><font face="Myriad Pro" size="14" color='#dba926'></font><br><font face="Myriad Pro" size="13" color='#202020'></font>]]>
+	</item>
+</banner>
