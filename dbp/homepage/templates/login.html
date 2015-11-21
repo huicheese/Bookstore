@@ -17,7 +17,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <!-- Custom Theme files -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="keywords" content="Shopper Responsive web template, Bootstrap Web Templates, Flat Web Templates, Andriod Compatible web template, 
+<meta name="keywords" content="Shopper Responsive web template, Bootstrap Web Templates, Flat Web Templates, Andriod Compatible web template,
 Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyErricsson, Motorola web design" />
 <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
 <!--webfont-->
@@ -28,7 +28,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <script type="text/javascript">
     $(document).ready(function () {
         $('#horizontalTab').easyResponsiveTabs({
-            type: 'default', //Types: default, vertical, accordion           
+            type: 'default', //Types: default, vertical, accordion
             width: 'auto', //auto or any width like 600px
             fit: true,   // 100% fit in a container
             closed: 'accordion', // Start closed if in accordion view
@@ -46,8 +46,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             width: 'auto',
             fit: true
         });
-
-        console.log(''+{{q}});
     });
 </script>
 <!---- tabs---->
@@ -61,7 +59,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			 <div class="top-menu">
 				 <ul>
 				 <li><a href="index.html">HOME</a></li>
-				 <li><a href="woman.html">SOME PAGE</a></li>		 
+				 <li><a href="woman.html">SOME PAGE</a></li>
 				 </ul>
 			 </div>
 		 </div>
@@ -69,19 +67,19 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			 <a href="index.html"><img src="http://www.googledrive.com/host/0B29ma7grVtkQc2VwblhsSkU4c2M/logo.png" alt=""/></a>
 		 </div>
 		 <div class="header-right">
-			 <div class="currency">			 
+			 <div class="currency">
 				 <a href="#"><i class="c1"></i></a>
 				 <a href="#"><i class="c2"></i></a>
 				 <a href="#"><i class="c3"></i></a>
 				 <a href="#"><i class="c4"></i></a>
-			 </div>		 
+			 </div>
 			 <div class="signin">
 				  <div class="cart-sec">
 				  <a href="cart.html"><img href="cart.html" src="http://www.googledrive.com/host/0B29ma7grVtkQc2VwblhsSkU4c2M/cart.png" alt=""/>(0)</a></div>
 				  <ul>
 					 <li><a href="registration.html">REGISTRATION</a> <span>/<span> &nbsp;</li>
 					 <li><a href="login.html"> LOGIN</a></li>
-				 </ul>			 
+				 </ul>
 			 </div>
 		 </div>
 		 <div class="clearfix"></div>
@@ -91,17 +89,25 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <div class="login">
 	 <div class="container">
 		 <h2>Login</h2>
-		 <div class="col-md-6 log">			 
+		 <div class="col-md-6 log">
 				 <p>Welcome, please enter the folling to continue.</p>
 				 <p>If you have previously Login with us, <span>click here</span></p>
-				 <form>
-					 <h5>User Name:</h5>	
-					 <input type="text" value="" name='loginID'>
+
+         <form method="post">
+           {% csrf_token %}
+           {{ form|linebreaks }}
+          <!-- <label for="login">Login ID: </label>
+          <input id="login" type="text" name="loginID" value="{{ current_name }}"> -->
+          <input type="submit" value="LOGIN">
+         </form>
+				 <!-- <form>
+					 <h5>User Name:</h5>
+					 <input type="text" value="" name="loginID">
 					 <h5>Password:</h5>
-					 <input type="password" value="" name='pw'>					
+					 <input type="password" value="" name="pw">
 					 <input type="submit" value="Login">
 					  <a href="#">Forgot Password ?</a>
-				 </form>				 
+				 </form> -->
 		 </div>
 		  <div class="col-md-6 login-right">
 			  	<h3>NEW REGISTRATION</h3>
@@ -109,7 +115,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				<a class="acount-btn" href="registration.html">Create an Account</a>
 		 </div>
 		 <div class="clearfix"></div>
-		 
+
 		 <div class="navigation">
 			 <ul>
 				 <li><a href="about.html">ABOUT</a></li>
@@ -136,9 +142,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			 <a href="#"><span class="icon4"></span></a>
 		 </div>
 		 <div class="clearfix"></div>
-	 </div>	 
+	 </div>
 </div>
-<!---->		
+<!---->
 </body>
 </html>
-		
