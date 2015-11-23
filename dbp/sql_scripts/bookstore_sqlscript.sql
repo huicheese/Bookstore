@@ -68,8 +68,7 @@ create table ratings(
     rating INTEGER CHECK (rating>=0 AND rating <=2),
     primary key (ISBN, feedbackID, ratingID),
     foreign key (ratingID) references customers(loginID),
-    foreign key (feedbackID) references feedbacks(loginID),
-    foreign key (ISBN) references feedbacks(ISBN)
+    foreign key (feedbackID, ISBN) references feedbacks(loginID, ISBN)
 );
 
 drop table feedbacks;
