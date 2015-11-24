@@ -5,7 +5,8 @@ from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from models import Customers
 
-from .forms import NameForm
+from .forms import NameForm , RegForm
+
 
 def homepage(request):
 	return render(request,'index.html')
@@ -61,37 +62,36 @@ def login(request):
 
 def registration(request):
 
-	req = {'fullName':None,
-	'loginID':None,
-	'pw':None,
-	'cfm_pw':None,
-	'majorCCN':None,
-	'address':None,
-	'phoneNum':None,
-	'q':None,
-	'error':False}
+	success = False
 
-	if 'fullName' in request.GET:
-		req['fullName'] = request.GET['fullName']
-	if 'loginID' in request.GET:
-		req['loginID'] = request.GET['loginID']
-	if 'pw' in request.GET:
-		req['pw'] = request.GET['pw']
-	if 'cfm_pw' in request.GET:
-		req['cfm_pw'] = request.GET['cfm_pw']
-	if 'majorCCN' in request.GET:
-		req['majorCCN'] = request.GET['majorCCN']
-	if 'address' in request.GET:
-		req['address'] = request.GET['address']
-	if 'phoneNum' in request.GET:
-		req['phoneNum'] = request.GET['phoneNum']
+	if request.method == 'POST':
+		print(request.POST['fullname'])		
+		regform = RegForm(request.POST)
 
-	req['q'] = Customers.objects.filter(loginid=req['loginID']);
+		if regform.is_valid():
+			fullname = regform.cleaned_data['fullname']
+        	login = regform.cleaned_data['loginid']
+        	pw = regform.cleaned_data['pw']
+        	cfmpw = regform.cleaned_data['cfmpw']
+        	majorccn = regform.cleaned_data['majorccn']
+        	address = regform.cleaned_data['address']
+        	phonenum = regform.cleaned_data['phonenum']
 
-	if req['fullName'] =="" or req['loginID'] =="" or req['pw'] != req['cfm_pw'] or req['majorCCN']== "" or req['address'] == "" or req['phoneNum'] == "":
-		req['error'] = True
+        	q = Customers.objects.filter(loginid=login);
+        	if not q:
+        		print('usename avaiable!')
+        		
+        		if pw!=cfmpw:
+        			print('Password mismatch!')
+        		else:
+        			p = Customers(fullname = fullname, loginid = login, pw =pw, majorccn = majorccn, address = address, phonenum = phonenum)
+        			p.save()
+        			print('account created!')
+        			request.session["login"]= True	
+        			success = True			
+        	else:
+        		print('username taken!')
 	else:
-		p = Customers(fullname = req['fullName'], loginid = req['loginID'], pw =req['pw'], majorccn = req['majorCCN'], address = req['address'], phonenum = req['phoneNum'])
-		p.save()
+		regform = RegForm()
 
-	return render_to_response('registration.html',req)
+	return render(request,'registration.html', {'regform':regform, 'success':success})
