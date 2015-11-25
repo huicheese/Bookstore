@@ -7,6 +7,8 @@ from models import Customers
 
 from .forms import NameForm , RegForm
 
+#for regrex
+import re
 
 def homepage(request):
 	return render(request,'index.html')
@@ -80,9 +82,16 @@ def registration(request):
         	q = Customers.objects.filter(loginid=login);
         	if not q:
         		print('usename avaiable!')
-        		
+
         		if pw!=cfmpw:
         			print('Password mismatch!')
+
+        		elif re.match("^[0-9]{16}|[0-9]{13}$",majorccn) == None:
+        			print('Invalid Credit Card No.!')
+
+        		elif re.match("[0-9]+",phonenum) == None:
+        			print('Invalid Phone No.!')
+
         		else:
         			p = Customers(fullname = fullname, loginid = login, pw =pw, majorccn = majorccn, address = address, phonenum = phonenum)
         			p.save()
