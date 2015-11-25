@@ -5,13 +5,29 @@ from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from models import Customers
 
-from .forms import NameForm , RegForm
+from .forms import NameForm , RegForm, BookForm
 
 #for regrex
 import re
 
 def homepage(request):
 	return render(request,'index.html')
+
+def book(request):
+    data = {'qty':0}
+    if request.method == 'POST':
+        bookform = BookForm(request.POST)
+
+        if bookform.is_valid():
+            qty = bookform.cleaned_data['qty']
+            print ('Order sent!')
+            print (qty)
+            return HttpResponseRedirect('/homepage/')
+
+    else:
+        bookform = BookForm(data)
+
+    return render(request,'book.html',{'bookform':bookform})
 
 def login(request):
     # if this is a POST request we need to process the form data
@@ -36,31 +52,6 @@ def login(request):
         form = NameForm()
 
     return render(request, 'login.html', {'form': form})
-
-# def login(request):
-# 	req = {'loginID':None,
-# 	'pw':None,
-# 	'error':False}
-#
-# 	if 'loginID' in request.GET:
-# 		req['loginID'] = request.GET['loginID']
-# 	if 'pw' in request.GET:
-# 		req['pw'] = request.GET['pw']
-#
-# 	##omit this line first then submit 1 query then unomit this line
-# 	# q = Customers.objects.filter(loginid=req['loginID'])
-# 	# print(q.values('pw'))
-# 	# print(req['pw'])
-# 	#
-# 	# if q.values('pw')[0]['pw'] != req['pw']:
-# 	# 	print 'Wrong password'
-# 	# else:
-# 	# 	print 'Login Successful!'
-# 	# 	#Session object created here
-# 	# 	request.session["login"]= True
-# 	###
-#
-# 	return render_to_response('login.html',req)
 
 def registration(request):
 

@@ -8,12 +8,11 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <html>
 <head>
 <title>Bookland - land of knowledge and wisdom</title>
-<link href="css/bootstrap.css" rel='stylesheet' type='text/css' />
+<link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<script src="js/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <!-- Custom Theme files -->
-<link href="css/hover.css" rel="stylesheet" media="all">
-<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+<link href="http://www.googledrive.com/host/0B29ma7grVtkQUHZYZGNiQ2RmcFE/style.css" rel="stylesheet" type="text/css" media="all" />
 <!-- Custom Theme files -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -38,21 +37,16 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			 </div>
 		 </div>
 		 <div class="logo">
-			 <a href="index.html"><img src="images/logo.png" alt=""/></a>
+			 <a href="index.html"><img src="http://www.googledrive.com/host/0B29ma7grVtkQc2VwblhsSkU4c2M/logo.png" alt=""/></a>
 		 </div>
 		 <div class="header-right">
-			 <div class="currency">			 
-				 <a href="#"><i class="c1"></i></a>
-				 <a class="active" href="#"><i class="c2"></i></a>
-				 <a href="#"><i class="c3"></i></a>
-				 <a href="#"><i class="c4"></i></a>
-			 </div>		 
+				 
 			 <div class="signin">
 				  <div class="cart-sec">
-				  <a href="cart.html"><img href="cart.html" src="images/cart.png" alt=""/>(0)</a></div>
+				  <a href="cart.html"><img href="cart.html" src="http://www.googledrive.com/host/0B29ma7grVtkQc2VwblhsSkU4c2M/cart.png" alt=""/>(0)</a></div>
 				  <ul>
-					 <li><a href="registration.html">REGISTRATION</a> <span>/<span> &nbsp;</li>
-					 <li><a href="login.html"> LOGIN</a></li>
+					 <li><a href="registration">REGISTRATION</a> <span>/<span> &nbsp;</li>
+					 <li><a href="login"> LOGIN</a></li>
 				 </ul>			 
 			 </div>
 		 </div>
@@ -72,19 +66,14 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
       });
     });
   </script>
-    <script src="js/responsiveslides.min.js"></script>
+    <script src="http://www.googledrive.com/host/0B29ma7grVtkQcnJIa2VTZVdOajg/responsiveslides.min.js"></script>
 <div class="single-section">
-	 <div class="col-md-8 fashions2">			 
-			<div class="slider2">
-				<ul class="rslides rslider" id="slider2">				  
-				  <li><img src="images/s2.jpg" alt=""></li>
-				  <li><img src="images/s3.jpg" alt=""></li>
-				  <li><img src="images/s4.jpg" alt=""></li>
-				  <li><img src="images/s11.jpg" alt=""></li>
-				</ul>
-		   </div>
+	 <div class="col-md-6 fashions2">			 
+		  
+				  <img class='bookimg' style='width:100%;' src="http://www.googledrive.com/host/0B29ma7grVtkQc2VwblhsSkU4c2M/s2.jpg">
+				
 	  </div> 
-	<div class="col-md-4 side-bar2">
+	<div class="col-md-6 side-bar2">
 		  <div class="product-price">
 			   <div class="product-name">
 				 <h2>PRODUCT NAME</h2>
@@ -94,7 +83,14 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					<h4>AVAILABLE</h4>
 			  </div>	
 			 <div class="product-id">
-				 <h4>SELECT YOUR SIZE</h4>
+			 	<form method = 'post'>
+				 	{{bookform|linebreaks }}
+					{% csrf_token %}
+					<br>
+					 <input class='add' type="submit" value="ADD TO CART"> 
+				 </form>
+			
+				 <!-- <h4>SELECT YOUR SIZE</h4>
 				  <div class="size select-size">					
 					 <ul>
 						 <li><a href="#">XS</a></li>
@@ -106,7 +102,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				 </div>
 				 <p>PRODUCT ID : <a href="#">D35TSJ69NU</a></p>
 				 <a class="add" href="cart.html">ADD TO BAG</a>
-			 </div>
+			  -->
+			  </div>
 		 </div>
       </div>
 	      	 
@@ -116,16 +113,30 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <div class="footer">
 	 <div class="container">
 		 <p>Copyright &copy; 2015 All rights reserved | Template by  <a href="http://w3layouts.com">  W3layouts</a></p>
-		 <div class="social">
-			 <a href="#"><span class="icon1"></span></a>
-			 <a href="#"><span class="icon2"></span></a>
-			 <a href="#"><span class="icon3"></span></a>
-			 <a href="#"><span class="icon4"></span></a>
-		 </div>
 		 <div class="clearfix"></div>
 	 </div>	 
 </div>
 <!---->		
 </body>
 </html>
-		
+
+
+<style type="text/css">
+
+input.add:hover {
+    color: #1a1818;
+    background: #d1d1d1;
+}
+
+input.add{
+	border:none;
+	color: #fff;
+    background: #1a1818;
+    padding: 0.7em;
+    text-decoration: none;
+    display: block;
+    margin-top: 6em;
+    text-align: center;
+    width: 100%;
+}
+</style>

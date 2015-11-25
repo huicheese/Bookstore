@@ -13,3 +13,7 @@ class RegForm(forms.Form):
     majorccn = forms.CharField(label='Major Credit Card Number',max_length=16)
     address = forms.CharField(label ='Address', max_length=100)
     phonenum = forms.CharField(label='Phone Number', max_length=25)
+
+class BookForm(forms.Form):
+	qty = forms.IntegerField(label='Qty')
+	
