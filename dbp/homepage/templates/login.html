@@ -92,14 +92,21 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		 <div class="col-md-6 log">			 
 				 <p>Welcome, please enter the folling to continue.</p>
 				 <p>If you have previously Login with us, <span>click here</span></p>
-				 <form>
+				<form method="post">
+           			{% csrf_token %}
+           			{{ form|linebreaks }}
+		          <!-- <label for="login">Login ID: </label>
+		          <input id="login" type="text" name="loginID" value="{{ current_name }}"> -->
+		        	<input type="submit" value="LOGIN">
+		        </form>
+				 <!-- <form>
 					 <h5>User Name:</h5>	
 					 <input type="text" value="">
 					 <h5>Password:</h5>
 					 <input type="password" value="">					
 					 <input type="submit" value="Login">
 					  <a href="#">Forgot Password ?</a>
-				 </form>				 
+				 </form>	 -->			 
 		 </div>
 		  <div class="col-md-6 login-right">
 			  	<h3>NEW REGISTRATION</h3>
