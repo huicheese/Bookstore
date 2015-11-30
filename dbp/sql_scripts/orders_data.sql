@@ -1,0 +1,10 @@
+insert into orders values (1, 'lololol', '2015-01-01 16:00:00', 'Payment Received');
+insert into orders values (2, 'huisquare', '2014-01-01 16:00:00', 'Shipped');
+insert into orders values (3, 'dabinlab', '2015-05-21 16:00:00', 'Returned');
+insert into orders values (4, 'cy', '2015-01-01 16:00:00', 'Canceled');
+insert into orders values (54, 'mhatib', '2015-01-01 16:00:00', 'Pending Order');
+insert into orders values (6, 'mhatib', '2015-01-01 16:00:00', 'Payment Received');
+insert into orders values (5, 'huisquare', '2015-01-01 16:00:00', 'Payment Received');
+insert into orders values (8, 'dabinlab', '2014-11-01 16:00:00', 'Shipped');
+insert into orders values (7, 'cy', '2013-01-01 16:00:00', 'Shipped');
+insert into orders values (9, 'lololol', '2015-01-01 16:00:00', 'Payment Received');

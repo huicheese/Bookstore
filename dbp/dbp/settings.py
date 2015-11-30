@@ -59,7 +59,7 @@ WSGI_APPLICATION = 'dbp.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'bookstore.db'),
+        'NAME': os.path.join(BASE_DIR, 'bookstore2.db'),
     }
 }
 

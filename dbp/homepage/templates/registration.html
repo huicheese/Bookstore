@@ -27,6 +27,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <script src="http://www.googledrive.com/host/0B29ma7grVtkQcnJIa2VTZVdOajg/easyResponsiveTabs.js" type="text/javascript"></script>
 <script type="text/javascript">
     $(document).ready(function () {
+
         $('#horizontalTab').easyResponsiveTabs({
             type: 'default', //Types: default, vertical, accordion           
             width: 'auto', //auto or any width like 600px
@@ -46,6 +47,15 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             width: 'auto',
             fit: true
         });
+
+        var login = '{{login}}';
+        console.log(login);
+        if (login == 'True'){
+        	alert('G O   B A C K');
+        	console.log('Welcome '+'{{loginid}}')
+        	$('.signin .signedout').toggle();
+        	$('.signin .signedin').toggle();
+        }
     });
 </script>
 <!---- tabs---->
@@ -58,8 +68,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		 <div class="header-left">
 			 <div class="top-menu">
 				 <ul>
-				 <li><a href="index.html">HOME</a></li>
-				 <li><a href="woman.html">SOME PAGE</a></li> 
+				 <li><a href="/homepage/">HOME</a></li>
+				 <li><a href="book">BOOK</a></li> 
 				 </ul>
 			 </div>
 		 </div>
@@ -67,18 +77,21 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			 <a href="http://127.0.0.1:8000/homepage/"><img src="http://www.googledrive.com/host/0B29ma7grVtkQc2VwblhsSkU4c2M/logo.png" alt=""/></a>
 		 </div>
 		 <div class="header-right">
-			 <div class="currency">			 
+			 <!-- <div class="currency">			 
 				 <a href="#"><i class="c1"></i></a>
 				 <a href="#"><i class="c2"></i></a>
 				 <a href="#"><i class="c3"></i></a>
 				 <a href="#"><i class="c4"></i></a>
-			 </div>		 
+			 </div>	 -->	 
 			 <div class="signin">
 				  <div class="cart-sec">
-				  <a href="cart.html"><img href="cart.html" src="http://www.googledrive.com/host/0B29ma7grVtkQc2VwblhsSkU4c2M/cart.png" alt=""/>(0)</a></div>
+				  <a href="checkout"><img href="checkout" src="http://www.googledrive.com/host/0B29ma7grVtkQc2VwblhsSkU4c2M/cart.png" alt=""/>(0)</a></div>
 				  <ul>
-					 <li><a href="registration.html">REGISTRATION</a> <span>/<span> &nbsp;</li>
-					 <li><a href="login.html"> LOGIN</a></li>
+					  <li class='signedout'><a href="registration">REGISTRATION</a> 
+					 <span>/<span> &nbsp;</li>
+					 <li class='signedout'><a href="login"> LOGIN</a></li>
+					 <li class='signedin' style='display:none'><a href="user">WELCOME, {{loginid}}!</a><span>/<span> &nbsp;</li>
+					 <li class='signedin' style='display:none'><a href="signout">SIGN OUT</a></li>
 				 </ul>			 
 			 </div>
 		 </div>
@@ -90,39 +103,13 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	 <div class="container">
 		 <h2>Registration</h2>
 		 <div class="col-md-6 reg-form">
-			 <div class="col-md-6 reg-form">
 			 <div class="reg">
-				 <p>Welcome, please enter the folling to continue.</p>
+				 <p>Welcome, please enter the following to continue.</p>
 				 <p>If you have previously registered with us, <a href="#">click here</a></p>
-				 <form>
-					 <ul>
-						 <li class="text-info">First Name: </li>
-						 <li><input type="text" value=""></li>
-					 </ul>
-					 <ul>
-						 <li class="text-info">Last Name: </li>
-						 <li><input type="text" value=""></li>
-					 </ul>				 
-					 <ul>
-						 <li class="text-info">Password: </li>
-						 <li><input type="password" value=""></li>
-					 </ul>
-					 <ul>
-						 <li class="text-info">Re-enter Password:</li>
-						 <li><input type="password" value=""></li>
-					 </ul>
-					 <ul>
-					 	<li class="text-info">Major Credit Card Number:</li>
-					 	<li><input type=text pattern="[0-9]{13,16}"></li>
-					 </ul>
-					 <ul>
-					 	<li class="text-info">Address:</li>
-					 	<li><input type="text" value=""></li>
-					 </ul>
-					 <ul>
-						 <li class="text-info">Mobile Number:</li>
-						 <li><input type="text" value=""></li>
-					 </ul>						
+				 <form method = 'post'>
+				 	{{regform|linebreaks }}
+					{% csrf_token %}
+
 					 <input type="submit" value="Register Now">
 					 <p class="click">By clicking this button, you agree to my modern style <a>Pollicy Terms and Conditions</a> to Use</p> 
 				 </form>
@@ -130,6 +117,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		 </div>
 		 <div class="col-md-6 reg-right">
 			 <h3>Completely Free Accouent</h3>
+			 {% if success %}
+				<p style="color: green;">Registration Successful!</p>
+			 {% endif %}
 			 <p>Pellentesque neque leo, dictum sit amet accumsan non, dignissim ac mauris. Mauris rhoncus, lectus tincidunt tempus aliquam, odio 
 			 libero tincidunt metus, sed euismod elit enim ut mi. Nulla porttitor et dolor sed condimentum. Praesent porttitor lorem dui, in pulvinar enim rhoncus vitae. Curabitur tincidunt, turpis ac lobortis hendrerit, ex elit vestibulum est, at faucibus erat ligula non neque.</p>
 			 <h3 class="lorem">Lorem ipsum dolor sit amet elit.</h3>

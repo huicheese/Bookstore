@@ -1,0 +1,217 @@
+<!--
+Author: W3layouts
+Author URL: http://w3layouts.com
+License: Creative Commons Attribution 3.0 Unported
+License URL: http://creativecommons.org/licenses/by/3.0/
+-->
+<!DOCTYPE html>
+<html>
+<head>
+<title>Bookland - land of knowledge and wisdom</title>
+<link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<!-- Custom Theme files -->
+<link href="http://www.googledrive.com/host/0B29ma7grVtkQUHZYZGNiQ2RmcFE/style.css" rel="stylesheet" type="text/css" media="all" />
+<!-- Custom Theme files -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="Shopper Responsive web template, Bootstrap Web Templates, Flat Web Templates, Andriod Compatible web template, 
+Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyErricsson, Motorola web design" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+<!--webfont-->
+<link href='http://fonts.googleapis.com/css?family=Lato:100,300,400,700,900' rel='stylesheet' type='text/css'>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#addfeedback').click(function() {
+  			$( "#feedbackform" ).toggle('slow');
+		});
+
+		var login = '{{login}}';
+        console.log(login);
+        if (login == 'True'){
+        	console.log('Welcome '+'{{loginid}}')
+        	$('.signin .signedout').toggle();
+        	$('.signin .signedin').toggle();
+        }
+    });
+</script>
+
+</head>
+<body>
+<!---->
+<div class="header single">
+	 <div class="container">
+		 <div class="header-left">
+			 <div class="top-menu">
+				 <ul>
+				 <li><a href="/homepage/">HOME</a></li>
+				 <li class="active"><a href="book">BOOK</a></li>	 
+				 </ul>
+			 </div>
+		 </div>
+		 <div class="logo">
+			 <a href="/homepage"><img src="http://www.googledrive.com/host/0B29ma7grVtkQc2VwblhsSkU4c2M/logo.png" alt=""/></a>
+		 </div>
+		 <div class="header-right">
+				 
+			 <div class="signin">
+				  <div class="cart-sec">
+				  <a href="checkout"><img href="checkout" src="http://www.googledrive.com/host/0B29ma7grVtkQc2VwblhsSkU4c2M/cart.png" alt=""/>(0)</a></div>
+				  <ul>
+					 <li class='signedout'><a href="registration">REGISTRATION</a> 
+					 <span>/<span> &nbsp;</li>
+					 <li class='signedout'><a href="login"> LOGIN</a></li>
+					 <li class='signedin' style='display:none'><a href="user">WELCOME, {{loginid}}!</a><span>/<span> &nbsp;</li>
+					 <li class='signedin' style='display:none'><a href="signout">SIGN OUT</a></li>
+				 </ul>			 
+			 </div>
+		 </div>
+		 <div class="clearfix"></div>
+	 </div>
+</div>
+<!---->
+ <script>
+    // You can also use "$(window).load(function() {"
+    $(function () {
+      // Slideshow 1
+      $("#slider2").responsiveSlides({
+         auto: true,
+		 nav: true,
+		 speed: 500,
+		 namespace: "callbacks",
+      });
+    });
+  </script>
+    <script src="http://www.googledrive.com/host/0B29ma7grVtkQcnJIa2VTZVdOajg/responsiveslides.min.js"></script>
+<div class="single-section">
+	 <div class="col-md-6 fashions2">			 
+		  
+				  <img class='bookimg' style='width:100%;' src="http://www.googledrive.com/host/0B29ma7grVtkQc2VwblhsSkU4c2M/s2.jpg">
+				
+	  </div> 
+	<div class="col-md-6 side-bar2">
+		  <div class="product-price">
+			   <div class="product-name">
+				 <h2>PRODUCT NAME</h2>
+					<p>hooded short fit reconstructed shuba jacket removable faux fur lining and hood</p>
+					<span>430.00 &euro;</span>
+					<div class="clearfix"></div>
+					<h4>AVAILABLE</h4>
+			  </div>	
+			 <div class="product-id">
+			 	<form method = 'post'>
+				 	{{bookform|linebreaks }}
+					{% csrf_token %}
+					<br>
+					<input class='add' type="submit" value="ADD TO CART"> 
+				</form>
+				<br><br>
+				<button id='addfeedback'>Add Feedback</button>
+				<form id='feedbackform' style='display:none;' method = 'post'>
+					{{feedbackform|linebreaks}}
+					{% csrf_token %}
+					<br>
+					<input type ="submit" value="Post">
+				</form>
+			
+				 <!-- <h4>SELECT YOUR SIZE</h4>
+				  <div class="size select-size">					
+					 <ul>
+						 <li><a href="#">XS</a></li>
+						 <li><a href="#">S</a></li>
+						 <li><a href="#">M</a></li>
+						 <li><a href="#">L</a></li>
+						 <li><a href="#">XL</a></li>
+					 </ul>
+				 </div>
+				 <p>PRODUCT ID : <a href="#">D35TSJ69NU</a></p>
+				 <a class="add" href="cart.html">ADD TO BAG</a>
+			  -->
+			  </div>
+			  <br>
+			 	<div>
+			  		<table id='feedbacktable' style="width:100%">
+			  		<thead>
+			  			<th>User</th>
+			  			<th>Feedback</th>
+			  			<th>Comment</th>		  	
+			  			<th>Rating</th>
+			  		</thead>
+			  		<tbody>
+			  			<tr>
+			  				<td>1234</td>
+			  				<td>5</td>
+			  				<td></td>
+			  				<td>
+			  					<form method='post'>
+			  					{% csrf_token %}
+			  						<input type="radio" name="rating" value="Not Helpful"> Not Helpful
+  									<input type="radio" name="rating" value="Helpful"> Helpful
+  									<input type="radio" name="rating" value="Very Helpful"> Very Helpful
+			  						<input type ="submit" value="Post">
+			  					</form>
+			  				</td>
+			  			</tr>
+			  			<tr>
+			  				<td>mhatib</td>
+			  				<td>8</td>
+			  				<td>wow so sexy</td>
+			  				<td>
+			  					<form method='post'>
+			  					{% csrf_token %}
+			  						<input type="radio" name="rating" value="Not Helpful"> Not Helpful
+  									<input type="radio" name="rating" value="Helpful"> Helpful
+  									<input type="radio" name="rating" value="Very Helpful"> Very Helpful
+			  						<input type ="submit" value="Post">
+			  					</form>
+			  				</td>
+			  			</tr>
+			  			</tbody>
+			  		</table>
+				</div>
+			  
+		 </div>
+      </div>
+	      	 
+	 <div class="clearfix"></div>
+</div>
+<!---->
+<div class="footer">
+	 <div class="container">
+		 <p>Copyright &copy; 2015 All rights reserved | Template by  <a href="http://w3layouts.com">  W3layouts</a></p>
+		 <div class="clearfix"></div>
+	 </div>	 
+</div>
+<!---->		
+</body>
+</html>
+
+
+<style type="text/css">
+
+input.add:hover {
+    color: #1a1818;
+    background: #d1d1d1;
+}
+
+input.add{
+	border:none;
+	color: #fff;
+    background: #1a1818;
+    padding: 0.7em;
+    text-decoration: none;
+    display: block;
+    margin-top: 6em;
+    text-align: center;
+    width: 100%;
+}
+
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 5px;
+}
+</style>

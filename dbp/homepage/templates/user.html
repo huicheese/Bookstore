@@ -53,6 +53,11 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         	$('.signin .signedout').toggle();
         	$('.signin .signedin').toggle();
         }
+
+        // $('.dropdown p').click(function(){
+        // 	$(this).parent().find('table').toggle('slow');
+        // });
+
     });
 </script>
 <!---- tabs---->
@@ -93,7 +98,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				  <div class="cart-sec">
 				  <a href="checkout"><img href="checkout" src="http://www.googledrive.com/host/0B29ma7grVtkQc2VwblhsSkU4c2M/cart.png" alt=""/>(0)</a></div>
 				  <ul>
-					 <li class='signedout'><a href="registration">REGISTRATION</a> 
+					  <li class='signedout'><a href="registration">REGISTRATION</a> 
 					 <span>/<span> &nbsp;</li>
 					 <li class='signedout'><a href="login"> LOGIN</a></li>
 					 <li class='signedin' style='display:none'><a href="user">WELCOME, {{loginid}}!</a><span>/<span> &nbsp;</li>
@@ -117,124 +122,106 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
   </script>
 </head>
 <body>
- <div class="slider">
-	  <div class="callbacks_container">
-	     <ul class="rslides" id="slider">
-	         <li>
-				  <img src="http://www.googledrive.com/host/0B29ma7grVtkQc2VwblhsSkU4c2M/bnr.jpg" alt="">
-				  <div class="banner-info">
-				  <h3>FASHIONS</h3>
-				  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. consectetur adipiscing elit. consectetur adipiscing elit.</p>
-				  </div>
-	         </li>
-	         <li>
-				 <img src="http://www.googledrive.com/host/0B29ma7grVtkQc2VwblhsSkU4c2M/bnr2.jpg" alt="">
-	        	 <div class="banner-info">
-	        	 <h3>MODELING</h3>
-	          	 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. consectetur adipiscing elit. consectetur adipiscing elit.</p>
-				 </div>
-			 </li>
-	         <li>
-	             <img src="http://www.googledrive.com/host/0B29ma7grVtkQc2VwblhsSkU4c2M/bnr3.jpg" alt="">
-	        	 <div class="banner-info">
-	        	 <h3>FASHIONS</h3>
-	          	 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. consectetur adipiscing elit. consectetur adipiscing elit.</p>
-				 </div>
-	         </li>
-	      </ul>
-	  </div>
-  </div>
 <!---->
 <div class="tab-section">
 	 <div class="wrap">
 		 <div id="horizontalTab">
-		 		<button type="button" class="btn btn-primary">Filters</button>
-			   <ul class="resp-tabs-list">
-					<li><a href="#">FEATURED</a></li>
-<!-- 					<li class="active"><a href="#">JUST ARRIVED</a></li>
-					<li><a href="#">SALE</a></li> -->
-					<div class="clearfix"></div>				
-			   </ul>
-			   <div class="resp-tabs-container">
-				
-				 <div>
-					 <div class="course_demo1" style="background-color:#eeeeee;">
-							 <div class="row" >
-							    <div class="col-xs-6 col-sm-4 span12">
-							    	<a href="book"><img class="center-block" src="http://www.googledrive.com/host/0B29ma7grVtkQc2VwblhsSkU4c2M/c1.jpg" alt="" /></a>
-									<h3 class="text-center">PRODUCT NAME</h3>
-									<h5 class="text-center">180.00 &euro;</h5>
-									<div class="clearfix"></div>
-							    </div>
-							    <div class="col-xs-6 col-sm-4 span12">
-							    		<a href="book"><img class="center-block" src="http://www.googledrive.com/host/0B29ma7grVtkQc2VwblhsSkU4c2M/c2.jpg" alt="" /></a>
-										<h3 class="text-center">PRODUCT NAME</h3>
-										<h5 class="text-center">180.00 &euro;</h5>
-										<div class="clearfix"></div>
-							    </div>
-							    <div class="col-xs-6 col-sm-4 span12">
-									<a href="book"><img class="center-block" src="http://www.googledrive.com/host/0B29ma7grVtkQc2VwblhsSkU4c2M/c3.jpg" alt="" /></a>				
-									<h3 class="text-center">PRODUCT NAME</h3>
-									<h5 class="text-center">180.00 &euro;</h5>
-									<div class="clearfix"></div>
-							    </div>
-							</div>
-							<div class="spacing">
-								<br />
-								<br />
-							</div>
-							<!-- Second row -->
-							<div class="row" >
-							    <div class="col-xs-6 col-sm-4 span12">
-							    	<a href="book"><img class="center-block" src="http://www.googledrive.com/host/0B29ma7grVtkQc2VwblhsSkU4c2M/c1.jpg" alt="" /></a>
-									<h3 class="text-center">PRODUCT NAME</h3>
-									<h5 class="text-center">180.00 &euro;</h5>
-									<div class="clearfix"></div>
-							    </div>
-							    <div class="col-xs-6 col-sm-4 span12">
-							    		<a href="book"><img class="center-block" src="http://www.googledrive.com/host/0B29ma7grVtkQc2VwblhsSkU4c2M/c2.jpg" alt="" /></a>
-										<h3 class="text-center">PRODUCT NAME</h3>
-										<h5 class="text-center">180.00 &euro;</h5>
-										<div class="clearfix"></div>
-							    </div>
-							    <div class="col-xs-6 col-sm-4 span12">
-									<a href="book"><img class="center-block" src="http://www.googledrive.com/host/0B29ma7grVtkQc2VwblhsSkU4c2M/c3.jpg" alt="" /></a>				
-									<h3 class="text-center">PRODUCT NAME</h3>
-									<h5 class="text-center">180.00 &euro;</h5>
-									<div class="clearfix"></div>
-							    </div>
-							</div>
-							<div class="spacing">
-								<br />
-								<br />
-							</div>
-							<div class="row" >
-							    <div class="col-xs-6 col-sm-4 span12">
-							    	<a href="book"><img class="center-block" src="http://www.googledrive.com/host/0B29ma7grVtkQc2VwblhsSkU4c2M/c1.jpg" alt="" /></a>
-									<h3 class="text-center">PRODUCT NAME</h3>
-									<h5 class="text-center">180.00 &euro;</h5>
-									<div class="clearfix"></div>
-							    </div>
-							    <div class="col-xs-6 col-sm-4 span12">
-							    		<a href="book"><img class="center-block" src="http://www.googledrive.com/host/0B29ma7grVtkQc2VwblhsSkU4c2M/c2.jpg" alt="" /></a>
-										<h3 class="text-center">PRODUCT NAME</h3>
-										<h5 class="text-center">180.00 &euro;</h5>
-										<div class="clearfix"></div>
-							    </div>
-							    <div class="col-xs-6 col-sm-4 span12">
-									<a href="book"><img class="center-block" src="http://www.googledrive.com/host/0B29ma7grVtkQc2VwblhsSkU4c2M/c3.jpg" alt="" /></a>				
-									<h3 class="text-center">PRODUCT NAME</h3>
-									<h5 class="text-center">180.00 &euro;</h5>
-									<div class="clearfix"></div>
-							    </div>
-							</div>
-							<div class="spacing">
-								<br />
-								<br />
-							</div>
-							</div>
-				 </div>			
-			 </div>
+		 		<h1>User Profile</h1>
+		 		<h3>Welcome {{loginid}}!</h3>
+		 		<div class='dropdown acctinfo'><p>Acct Info</p>
+		 			<table class='table table-hover'>
+		 				<thead>
+		 					<tr>
+		 						<th>Profile</th>
+		 						<th></th>
+		 					</tr>
+		 				</thead>
+		 				<tbody>
+		 					<tr>
+		 						<td>Full Name:</td>
+		 						<td>{{fullname}}</td>
+		 					</tr>
+		 					<tr>
+		 						<td>Login ID:</td>
+		 						<td>{{loginid}}</td>
+		 					</tr>
+		 					<tr>
+		 						<td>Password:</td>
+		 						<td>{{pw}}</td>
+		 					</tr>
+		 					<tr>
+		 						<td>Major Credit Card Number:</td>
+		 						<td>{{majorccn}}</td>
+		 					</tr>
+		 					<tr>
+		 						<td>Address:</td>
+		 						<td>{{address}}</td>
+		 					</tr>
+		 					<tr>
+		 						<td>Phone Nymber:</td>
+		 						<td>{{phonenum}}</td>
+		 					</tr>
+		 					
+		 				</tbody>
+		 			</table>
+
+		 		</div>
+		 		<div class='dropdown order'><p>Order</p>
+			 		<table class="table table-hover">
+			 			<thead>
+			 				<tr>
+			 					<th>Order No.</th>
+			 					<th>Order Item</th>
+			 					<th>Qty</th>
+			 					<th>Status</th>
+			 				</tr>
+			 			</thead>
+			 			<tbody>
+			 				<tr>
+			 					<td>Oid</td>
+			 					<td>Book</td>
+			 					<td>9999</td>
+			 					<th>Shipped</th>
+			 				</tr>
+			 			</tbody>
+			 		</table>
+		 		</div>
+		 		<div class='dropdown feedback'><p>Feedback</p>
+		 			<table class="table table-hover">
+		 				<thead>
+		 					<tr>
+		 						<th>Book</th>
+		 						<th>Feedback</th>
+		 						<th>Comment</th>
+		 					</tr>
+		 				</thead>
+		 				<tbody>
+		 					<tr>
+		 						<td>Title</td>
+		 						<td>9</td>
+		 						<td>Wow better than descartes</td>
+		 					</tr>
+		 				</tbody>
+		 			</table>
+		 		</div>
+		 		<div class='dropdown rating'><p>Rating</p>
+			 		<table class="table table-hover">
+			 			<thead>
+			 				<tr>
+			 					<th>Feedback on Book:</th>
+			 					<th>Rating</th>
+			 					<th>Rated By</th>
+			 				</tr>
+			 			</thead>
+			 			<tbody>
+			 				<tr>
+			 					<td>Title</td>
+			 					<td>Helpful</td>
+			 					<td>mHatib</td>
+			 				</tr>
+			 			</tbody>
+			 		</table>
+		 		</div>
 		 </div>
 	 </div>
 	 <div class="container">
@@ -246,9 +233,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				 <li><a href="man.html">STORE</a></li>
 				 <li><a href="terms.html">TERMS & CONDITION</a></li>
 				 <li><a href="man.html">SHOW TO BUY</a></li>
-				 <li><a href="index.html">SHIPPING</a></li>
+				 <li><a href="/homepage/">SHIPPING</a></li>
 				 <li><a href="man.html">RETURNS</a></li>
-				 <li><a href="book">SIZE CHART</a></li>
+				 <li><a href="single.html">SIZE CHART</a></li>
 			 </ul>
 		 </div>
 	 </div>
@@ -269,3 +256,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <!---->		
 </body>
 </html>
+
+<style type="text/css">
+table{
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 5px;
+}
+</style>
+		
