@@ -45,7 +45,7 @@ def book(request,isbn):
 
             if feedbackform.is_valid():
                 print ('Feedback posted!')
-        
+
         elif 'qty' in request.POST:
             bookform = BookForm(request.POST)
             feedbackform = FeedbackForm(feedbackdefault)
@@ -59,7 +59,7 @@ def book(request,isbn):
                     qty = bookform.cleaned_data['qty']
                     print ('Order sent!')
                     print (qty)
-                    return HttpResponseRedirect('/homepage/checkout') 
+                    return HttpResponseRedirect('/homepage/checkout')
 
         else:
             print ('Rating posted!')
@@ -97,7 +97,7 @@ def login(request):
                 print 'Login Successful!'
                 request.session["loginid"] = login
                 request.session["login"]= True
-                request.session.set_expiry(300) 
+                request.session.set_expiry(300)
                 return HttpResponseRedirect('/homepage/')
     else:
         form = loginform()
@@ -110,11 +110,11 @@ def login(request):
     return render(request, 'login.html', {'form': form})
 
 def registration(request):
-    
+
     success = False
 
     if request.method == 'POST':
-        print(request.POST['fullname'])     
+        print(request.POST['fullname'])
         regform = RegForm(request.POST)
 
         if regform.is_valid():
@@ -143,8 +143,8 @@ def registration(request):
                     p = Customers(fullname = fullname, loginid = login, pw =pw, majorccn = majorccn, address = address, phonenum = phonenum)
                     p.save()
                     print('account created!')
-                    request.session["login"]= True  
-                    success = True          
+                    request.session["login"]= True
+                    success = True
             else:
                 print('username taken!')
     else:
@@ -158,7 +158,7 @@ def registration(request):
     return render(request,'registration.html', {'regform':regform, 'success':success})
 
 def advsearch(request):
-    
+
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
@@ -194,8 +194,8 @@ def checkout(request):
         login = request.session["login"]
         loginid = request.session["loginid"]
         return render (request,'checkout.html',{'login':login,'loginid':loginid})
-
-    return render (request,'checkout.html')
+    else:
+        return HttpResponseRedirect('login')
 
 def user(request):
     if "login" in request.session and "loginid" in request.session:
@@ -207,4 +207,3 @@ def user(request):
         data['loginid']=loginid
 
     return render (request,'user.html',data)
-
