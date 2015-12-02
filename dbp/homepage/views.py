@@ -51,10 +51,15 @@ def book(request,isbn):
             feedbackform = FeedbackForm(feedbackdefault)
 
             if bookform.is_valid():
-                qty = bookform.cleaned_data['qty']
-                print ('Order sent!')
-                print (qty)
-                return HttpResponseRedirect('/homepage/checkout') 
+
+                if q[0].stock<= 0:
+                    print ("Insufficient Stock!")
+
+                else:
+                    qty = bookform.cleaned_data['qty']
+                    print ('Order sent!')
+                    print (qty)
+                    return HttpResponseRedirect('/homepage/checkout') 
 
         else:
             print ('Rating posted!')
