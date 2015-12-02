@@ -3,7 +3,7 @@ from django.shortcuts import render, render_to_response
 # Create your views here.
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
-from models import Customers, Orders
+from models import Customers, Orders, Books, Feedbacks
 
 from .forms import loginform, RegForm, BookForm, advsearchform, FeedbackForm
 
@@ -11,18 +11,27 @@ from .forms import loginform, RegForm, BookForm, advsearchform, FeedbackForm
 import re
 
 def homepage(request):
+
+    q = Books.objects.all()[:9]
+
     if "login" in request.session and "loginid" in request.session:
         login = request.session["login"]
         loginid = request.session["loginid"]
-        return render(request,'index.html',{'login':login,'loginid':loginid})
+        return render(request,'index.html',{'login':login,'loginid':loginid,'booklist':q})
     else:
-        return render(request,'index.html')
+        return render(request,'index.html',{'booklist':q})
 
 def signout(request):
     request.session.flush()
     return HttpResponseRedirect('/homepage/')
 
-def book(request):
+def book(request,isbn):
+    print isbn
+    q = Books.objects.filter(isbn=isbn)
+
+    p = Feedbacks.objects.filter(isbn=isbn)[:5]
+    print p
+
     bookdefault = {'qty':1}
     feedbackdefault = {'feedback':1,'comment':''}
     print (request)
@@ -52,7 +61,7 @@ def book(request):
             bookform = BookForm(bookdefault)
             feedbackform = FeedbackForm(feedbackdefault)
             print (request.POST['rating'])
-            return render(request,'book.html',{'bookform':bookform, 'feedbackform':feedbackform})
+            return render(request,'book.html',{'bookform':bookform, 'feedbackform':feedbackform, 'book':q[0], 'feedbacks':p})
 
     else:
         bookform = BookForm(bookdefault)
@@ -61,9 +70,9 @@ def book(request):
     if "login" in request.session and "loginid" in request.session:
         login = request.session["login"]
         loginid = request.session["loginid"]
-        return render(request,'book.html',{'bookform':bookform, 'feedbackform':feedbackform,'login':login,'loginid':loginid})
+        return render(request,'book.html',{'bookform':bookform, 'feedbackform':feedbackform,'login':login,'loginid':loginid, 'book':q[0], 'feedbacks':p})
 
-    return render(request,'book.html',{'bookform':bookform, 'feedbackform':feedbackform})
+    return render(request,'book.html',{'bookform':bookform, 'feedbackform':feedbackform, 'book':q[0], 'feedbacks':p})
 
 def login(request):
     # if this is a POST request we need to process the form data

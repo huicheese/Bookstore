@@ -89,17 +89,22 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <div class="single-section">
 	 <div class="col-md-6 fashions2">			 
 		  
-				  <img class='bookimg' style='width:100%;' src="http://www.googledrive.com/host/0B29ma7grVtkQc2VwblhsSkU4c2M/s2.jpg">
+				  <img class='bookimg' style='width:50%; position:relative; left:25%;' src="{{book.picture}}">
 				
 	  </div> 
 	<div class="col-md-6 side-bar2">
 		  <div class="product-price">
 			   <div class="product-name">
-				 <h2>PRODUCT NAME</h2>
-					<p>hooded short fit reconstructed shuba jacket removable faux fur lining and hood</p>
-					<span>430.00 &euro;</span>
+				 <h2>{{book.title}}</h2>
+					<p>Subject: {{book.subject}}</p>
+					<p>Keywords: {{books.keywords}}</p>
+					<span>{{book.price}} &euro;</span>
 					<div class="clearfix"></div>
-					<h4>AVAILABLE</h4>
+					{% if book.stock > 0 %}
+						<h4>AVAILABLE</h4>
+					{% else %}
+						<h4 style ='color: #DA3D20;'>NOT AVAILABLE</h4>
+					{% endif %}
 			  </div>	
 			 <div class="product-id">
 			 	<form method = 'post'>
@@ -141,34 +146,23 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			  			<th>Rating</th>
 			  		</thead>
 			  		<tbody>
-			  			<tr>
-			  				<td>1234</td>
-			  				<td>5</td>
-			  				<td></td>
-			  				<td>
-			  					<form method='post'>
-			  					{% csrf_token %}
-			  						<input type="radio" name="rating" value="Not Helpful"> Not Helpful
-  									<input type="radio" name="rating" value="Helpful"> Helpful
-  									<input type="radio" name="rating" value="Very Helpful"> Very Helpful
-			  						<input type ="submit" value="Post">
-			  					</form>
-			  				</td>
-			  			</tr>
-			  			<tr>
-			  				<td>mhatib</td>
-			  				<td>8</td>
-			  				<td>wow so sexy</td>
-			  				<td>
-			  					<form method='post'>
-			  					{% csrf_token %}
-			  						<input type="radio" name="rating" value="Not Helpful"> Not Helpful
-  									<input type="radio" name="rating" value="Helpful"> Helpful
-  									<input type="radio" name="rating" value="Very Helpful"> Very Helpful
-			  						<input type ="submit" value="Post">
-			  					</form>
-			  				</td>
-			  			</tr>
+			  			{% for feedback in feedbacks %}
+				  			<tr>
+				  				<td>{{feedback.loginid}}</td>
+				  				<td>{{feedback.review}}</td>
+				  				<td>{{feedback.optionalcomment}}</td>
+				  				<td>
+				  					<form method='post'>
+				  					{% csrf_token %}
+				  						<input type="radio" name="rating" value="Not Helpful"> Not Helpful
+	  									<input type="radio" name="rating" value="Helpful"> Helpful
+	  									<input type="radio" name="rating" value="Very Helpful"> Very Helpful
+				  						<input type ="submit" value="Post">
+				  					</form>
+				  				</td>
+				  			</tr>
+			  			{% endfor %}
+			  			
 			  			</tbody>
 			  		</table>
 				</div>
