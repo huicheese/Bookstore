@@ -53,7 +53,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         	$('.signin .signedout').toggle();
         	$('.signin .signedin').toggle();
         }
-
         // $('.dropdown p').click(function(){
         // 	$(this).parent().find('table').toggle('slow');
         // });
@@ -135,27 +134,27 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		 				<tbody>
 		 					<tr>
 		 						<td>Full Name:</td>
-		 						<td>{{fullname}}</td>
+		 						<td>{{user.fullname}}</td>
 		 					</tr>
 		 					<tr>
 		 						<td>Login ID:</td>
-		 						<td>{{loginid}}</td>
+		 						<td>{{user.loginid}}</td>
 		 					</tr>
 		 					<tr>
 		 						<td>Password:</td>
-		 						<td>{{pw}}</td>
+		 						<td>{{user.pw}}</td>
 		 					</tr>
 		 					<tr>
 		 						<td>Major Credit Card Number:</td>
-		 						<td>{{majorccn}}</td>
+		 						<td>{{user.majorccn}}</td>
 		 					</tr>
 		 					<tr>
 		 						<td>Address:</td>
-		 						<td>{{address}}</td>
+		 						<td>{{user.address}}</td>
 		 					</tr>
 		 					<tr>
 		 						<td>Phone Nymber:</td>
-		 						<td>{{phonenum}}</td>
+		 						<td>{{user.phonenum}}</td>
 		 					</tr>
 
 		 				</tbody>
@@ -169,15 +168,32 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			 					<th>Order No.</th>
 			 					<th>Order Item</th>
 			 					<th>Qty</th>
+			 					<th>Date</th>
 			 					<th>Status</th>
 			 				</tr>
 			 			</thead>
 			 			<tbody>
 			 				<tr>
-			 					<td>Oid</td>
-			 					<td>Book</td>
+			 					<td rowspan="2">Oid</td>
+			 					<td>book 1</td>
 			 					<td>9999</td>
-			 					<th>Shipped</th>
+			 					<td rowspan="2">dd:mm:yyy</td>
+			 					<td rowspan="2">Shipped</td>
+			 				</tr>
+			 				<tr>
+			 					<td>book 1</td>
+			 					<td>9999</td>
+			 				</tr>
+			 				<tr>
+			 					<td rowspan="2">Oid2</td>
+			 					<td>book 1</td>
+			 					<td>9999</td>
+			 					<td rowspan="2">dd:mm:yyy</td>
+			 					<td rowspan="2">Shipped</td>
+			 				</tr>
+			 				<tr>
+			 					<td>book 1</td>
+			 					<td>9999</td>
 			 				</tr>
 			 			</tbody>
 			 		</table>
@@ -192,11 +208,15 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		 					</tr>
 		 				</thead>
 		 				<tbody>
+
+		 				{% for feedback in feedbacks %}
 		 					<tr>
-		 						<td>Title</td>
-		 						<td>9</td>
-		 						<td>Wow better than descartes</td>
+		 						<td>{{feedback.isbn}}</td>
+		 						<td>{{feedback.review}}</td>
+		 						<td>{{feedback.optionalcomment}}</td>
 		 					</tr>
+
+		 				{% endfor %}
 		 				</tbody>
 		 			</table>
 		 		</div>
@@ -210,11 +230,19 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			 				</tr>
 			 			</thead>
 			 			<tbody>
+			 			{% for rating in ratings %}
 			 				<tr>
-			 					<td>Title</td>
-			 					<td>Helpful</td>
-			 					<td>mHatib</td>
+			 					<td>{{rating.isbn}}</td>
+			 					{% if rating.rating == 0 %}
+			 						<td>Not Helpful</td>
+			 					{% elif rating.rating == 1%}
+			 						<td>Helpful</td>
+			 					{% else %}
+			 						<td>Very Helpful</td>
+			 					{% endif %}
+			 					<td>{{rating.ratingid}}</td>
 			 				</tr>
+			 			{% endfor %}
 			 			</tbody>
 			 		</table>
 		 		</div>

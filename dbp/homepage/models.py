@@ -59,7 +59,7 @@ class Feedbacks(models.Model):
     isbn = models.ForeignKey('Books', db_column='ISBN',default="978-0345803481")
     review = models.IntegerField(blank=True, null=True)
     optionalcomment = models.TextField(db_column='optionalComment', blank=True, null=True)  # Field name made lowercase.
-    feedback_date = models.TimeField()
+    feedback_date = models.DateTimeField()
 
     class Meta:
         verbose_name = 'Feedback'
