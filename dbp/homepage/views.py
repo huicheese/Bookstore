@@ -11,6 +11,7 @@ from .forms import loginform, RegForm, BookForm, advsearchform, FeedbackForm
 from datetime import datetime
 #for regrex
 import re
+from django.db import connection
 
 def homepage(request):
 
@@ -247,8 +248,15 @@ def user(request):
         login = request.session["login"]
         loginid = request.session["loginid"]
         user = Customers.objects.filter(loginid=loginid).values()[0]
-        feedbacks = Feedbacks.objects.filter(loginid=loginid)
-        ratings = Ratings.objects.filter(feedbackid=loginid)
+        cursor = connection.cursor()
 
-    return render (request,'user.html',{'user':user,'feedbacks':feedbacks,'ratings':ratings,'login':login,'loginid':loginid})
+        cursor.execute("SELECT books.title, feedbacks.review, feedbacks.optionalComment FROM books,feedbacks WHERE feedbacks.loginID = %s AND books.ISBN = feedbacks.ISBN",[loginid])
+        feedbacks = cursor.fetchall()
+        cursor.execute("SELECT books.title AS title, ratings.rating AS rating, ratings.ratingID AS rid FROM books,ratings WHERE ratings.feedbackID = %s AND books.ISBN = ratings.ISBN",[loginid])
+        ratings = cursor.fetchall()
+        cursor.execute("SELECT orders.oid, books.title, order_items.qty, orders.order_date, orders.order_status FROM books,orders,order_items WHERE orders.loginID = %s AND orders.oid = order_items.oid AND order_items.ISBN = books.ISBN",[loginid])
+        orders = cursor.fetchall()
+        cursor.close()
+
+    return render (request,'user.html',{'user':user, 'orders':orders, 'feedbacks':feedbacks,'ratings':ratings,'login':login,'loginid':loginid})
 

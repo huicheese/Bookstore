@@ -173,7 +173,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			 				</tr>
 			 			</thead>
 			 			<tbody>
-			 				<tr>
+			 				<!-- <tr>
 			 					<td rowspan="2">Oid</td>
 			 					<td>book 1</td>
 			 					<td>9999</td>
@@ -194,7 +194,16 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			 				<tr>
 			 					<td>book 1</td>
 			 					<td>9999</td>
+			 				</tr> -->
+			 				{% for order in orders %}
+			 				<tr>
+			 					{%for i in order %}
+			 					
+				 					<td>{{i}}</td>
+
+			 					{% endfor %}
 			 				</tr>
+			 				{% endfor %}
 			 			</tbody>
 			 		</table>
 		 		</div>
@@ -211,9 +220,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 		 				{% for feedback in feedbacks %}
 		 					<tr>
-		 						<td>{{feedback.isbn}}</td>
-		 						<td>{{feedback.review}}</td>
-		 						<td>{{feedback.optionalcomment}}</td>
+		 						{% for i in feedback%}
+		 						<td>{{i}}</td>
+		 						{% endfor %}
 		 					</tr>
 
 		 				{% endfor %}
@@ -232,15 +241,19 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			 			<tbody>
 			 			{% for rating in ratings %}
 			 				<tr>
-			 					<td>{{rating.isbn}}</td>
-			 					{% if rating.rating == 0 %}
-			 						<td>Not Helpful</td>
-			 					{% elif rating.rating == 1%}
-			 						<td>Helpful</td>
-			 					{% else %}
-			 						<td>Very Helpful</td>
-			 					{% endif %}
-			 					<td>{{rating.ratingid}}</td>
+			 					{%for i in rating %}
+			 					
+				 					{% if rating.rating == 0 %}
+				 						<td>Not Helpful</td>
+				 					{% elif rating.rating == 1 %}
+				 						<td>Helpful</td>
+				 					{% elif rating.rating == 2 %}
+				 						<td>Very Helpful</td>
+				 					{% else %}
+				 						<td>{{i}}</td>
+				 					{% endif %}
+
+			 					{% endfor %}
 			 				</tr>
 			 			{% endfor %}
 			 			</tbody>
