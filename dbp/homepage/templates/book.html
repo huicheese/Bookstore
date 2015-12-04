@@ -150,9 +150,13 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				  				<td>
 				  					<form method='post'>
 				  					{% csrf_token %}
-				  						<input type="radio" name="rating" value="Not Helpful"> Not Helpful
-	  									<input type="radio" name="rating" value="Helpful"> Helpful
-	  									<input type="radio" name="rating" value="Very Helpful"> Very Helpful
+				  						<input type="hidden" name="loginid" value="{{feedback.loginid}}">
+				  						<input type="hidden" name="review" value="{{feedback.review}}">
+				  						<input type="hidden" name="optionalcomment" value="{{feedback.optionalcomment}}">
+
+				  						<input type="radio" name="rating" value="0"> Not Helpful
+	  									<input type="radio" name="rating" value="1"> Helpful
+	  									<input type="radio" name="rating" value="2"> Very Helpful
 				  						<input type ="submit" value="Post">
 				  					</form>
 				  				</td>

@@ -15,8 +15,7 @@ from django.db import connection
 
 def homepage(request):
 
-    q = Books.objects.all()[:9]
-    print q
+    q = Books.objects.all()
 
     if "login" in request.session and "loginid" in request.session:
         login = request.session["login"]
@@ -34,13 +33,15 @@ def book(request,isbn):
     q = Books.objects.filter(isbn=isbn)
     p = Feedbacks.objects.filter(isbn=isbn)
 
+    #default values for the bookform and the feedbackform 
     bookdefault = {'qty':1}
     feedbackdefault = {'feedback':1,'comment':''}
 
+    #if it's a post request 
     if request.method == 'POST':
 
+        #If it's a feedbackform request 
         if 'feedback' in  request.POST:
-            print (request.POST['feedback'])
             feedbackform = FeedbackForm(request.POST)
             bookform = BookForm(bookdefault)
 
@@ -50,13 +51,13 @@ def book(request,isbn):
                     comment = feedbackform.cleaned_data['comment']
                     customer = Customers.objects.get(loginid=request.session["loginid"])
                     book = Books.objects.get(isbn=isbn)
-                    print customer
                     f = Feedbacks(loginid=customer,isbn=book,review=review,optionalcomment=comment,feedback_date=str(datetime.now()))
                     f.save()
                     print ('Feedback posted!')
                 else:
                     print ('Login to give feedback')
-
+        
+        #If it's a bookform request
         elif 'qty' in request.POST:
             bookform = BookForm(request.POST)
             feedbackform = FeedbackForm(feedbackdefault)
@@ -67,14 +68,13 @@ def book(request,isbn):
                     book = Books.objects.get(isbn=isbn)
 
                     print ('Processing order')
-                    print qty
 
                     temp = request.session["orders"]
                     if isbn in temp:
                         temp[isbn] = temp[isbn]+qty
                     else:
                         temp[isbn]= qty
-
+                    
 
                     if temp[isbn] > book.stock:
                         print 'Insufficient Stock!'
@@ -82,27 +82,46 @@ def book(request,isbn):
                     else:
                         print temp
                         request.session["orders"] = temp
-                        return HttpResponseRedirect('/homepage/checkout')
+                        return HttpResponseRedirect('/homepage/checkout') 
 
                 else:
                     print ('Login to order')
 
+        #Else if it's a rating request 
         else:
-            print ('Rating posted!')
             bookform = BookForm(bookdefault)
             feedbackform = FeedbackForm(feedbackdefault)
-            print (request.POST['rating'])
-            return render(request,'book.html',{'bookform':bookform, 'feedbackform':feedbackform, 'book':q[0], 'feedbacks':p})
 
+            if "loginid" in request.session and request.session['loginid'] != request.POST['loginid']:
+                
+                rating = request.POST['rating']
+                ratingid = Customers.objects.get(loginid=request.session['loginid'])
+                feedbackid = Customers.objects.get(loginid=request.POST['loginid'])
+                book = Books.objects.get(isbn=isbn)
+                p = Ratings(isbn=book,feedbackid=feedbackid,ratingid=ratingid,rating=rating)
+                p.save()
+                print 'Ratings posted!'
+                return HttpResponseRedirect('/homepage/')
+
+            elif request.session['loginid'] == request.POST['loginid']:
+                print 'You cannot review yourself!'                
+            else:
+                print 'Please login first'
+
+
+    #If it's not a post request 
     else:
+        #create the default forms
         bookform = BookForm(bookdefault)
         feedbackform = FeedbackForm(feedbackdefault)
 
+    #If user is logged in render the page with the Welcome ___! and signout options
     if "login" in request.session and "loginid" in request.session:
         login = request.session["login"]
         loginid = request.session["loginid"]
         return render(request,'book.html',{'bookform':bookform, 'feedbackform':feedbackform,'login':login,'loginid':loginid, 'book':q[0], 'feedbacks':p})
 
+    #Else rendeer the page with the register and login options
     return render(request,'book.html',{'bookform':bookform, 'feedbackform':feedbackform, 'book':q[0], 'feedbacks':p})
 
 def login(request):
@@ -141,7 +160,7 @@ def registration(request):
     success = False
 
     if request.method == 'POST':
-        print(request.POST['fullname'])
+
         regform = RegForm(request.POST)
 
         if regform.is_valid():
