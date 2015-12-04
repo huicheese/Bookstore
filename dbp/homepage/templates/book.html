@@ -102,21 +102,42 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						<h4 style ='color: #DA3D20;'>NOT AVAILABLE</h4>
 					{% endif %}
 			  </div>
+
+        <form id='viewform'  method = 'post'>
+          {{viewform|linebreaks}}
+          {% csrf_token %}
+          <br>
+          <input type ="submit" value="Filter">
+        </form>
+        <br>
+        <div>
+            <table id='viewtable' style="width:100%">
+            <thead>
+              <th>User</th>
+              <th>Feedback</th>
+              <th>Comment</th>
+            </thead>
+            <tbody>
+              <tbody>
+              {% for feedback in views %}
+                <tr>
+                  {% for i in feedback%}
+                  <td>{{i}}</td>
+                  {% endfor %}
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+        </div>
 			 <div class="product-id">
 			 	<form method = 'post'>
 				 	{{bookform|linebreaks }}
 					{% csrf_token %}
-					<br>
-					<input class='add' type="submit" value="ADD TO CART">
+          <input class='add' type="submit" value="ADD TO CART">
 				</form>
 				<br><br>
-				<button id='addfeedback'>Add Feedback</button>
-				<form id='feedbackform' style='display:none;' method = 'post'>
-					{{feedbackform|linebreaks}}
-					{% csrf_token %}
-					<br>
-					<input type ="submit" value="Post">
-				</form>
+
+
 
 				 <!-- <h4>SELECT YOUR SIZE</h4>
 				  <div class="size select-size">
@@ -130,9 +151,16 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				 </div>
 				 <p>PRODUCT ID : <a href="#">D35TSJ69NU</a></p>
 				 <a class="add" href="cart.html">ADD TO BAG</a>
+         <tr>
+          {% for i in feedback%}
+          <td>{{i}}</td>
+          {% endfor %}
+        </tr>
 			  -->
 			  </div>
 			  <br>
+
+        <br>
 			 	<div>
 			  		<table id='feedbacktable' style="width:100%">
 			  		<thead>
@@ -142,6 +170,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			  			<th>Rating</th>
 			  		</thead>
 			  		<tbody>
+              <tbody>
+
 			  			{% for feedback in feedbacks %}
 				  			<tr>
 				  				<td>{{feedback.loginid}}</td>
@@ -166,7 +196,16 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			  			</tbody>
 			  		</table>
 				</div>
-
+        <br>
+        
+        <button id='addfeedback'>Add Feedback</button>
+				<form id='feedbackform' style='display:none;' method = 'post'>
+					{{feedbackform|linebreaks}}
+					{% csrf_token %}
+					<br>
+					<input type ="submit" value="Post">
+        </form>
+        <br><br>
 		 </div>
       </div>
 

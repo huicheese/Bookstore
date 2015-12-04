@@ -27,6 +27,11 @@ class RegForm(forms.Form):
 class BookForm(forms.Form):
     qty = forms.IntegerField(label='Qty', validators=[validate_positive])
 
+class ViewForm(forms.Form):
+    CHOICES2 = (('1', '1',), ('2', '2',), ('3', '3',), ('4', '4',), ('5', '5',), ('6', '6',), ('7', '7',), ('8', '8',), ('9', '9',), ('10', '10',))
+    num = forms.ChoiceField(label="View Top Feedbacks", widget=forms.Select, choices=CHOICES2)
+    # comment = forms.CharField(label="Comments(Optional)", required=False)
+
 class FeedbackForm(forms.Form):
     CHOICES = (('1', '1',), ('2', '2',), ('3', '3',), ('4', '4',), ('5', '5',), ('6', '6',), ('7', '7',), ('8', '8',), ('9', '9',), ('10', '10',))
     feedback = forms.ChoiceField(label="Feedback", widget=forms.Select, choices=CHOICES)
