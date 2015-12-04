@@ -10,5 +10,6 @@ urlpatterns = [
 	url(r'^book/([0-9]{3}-[0-9]{10})/$',views.book,name='book'),
 	url(r'checkout',views.checkout,name='checkout'),
 	url(r'signout',views.signout,name='signout'),
-	url(r'user',views.user,name='user')
+	url(r'user',views.user,name='user'),
+	url(r'admin',views.admin,name='admin')
 ]

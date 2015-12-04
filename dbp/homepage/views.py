@@ -56,7 +56,7 @@ def book(request,isbn):
                     print ('Feedback posted!')
                 else:
                     print ('Login to give feedback')
-        
+
         elif 'qty' in request.POST:
             bookform = BookForm(request.POST)
             feedbackform = FeedbackForm(feedbackdefault)
@@ -74,7 +74,7 @@ def book(request,isbn):
                         temp[isbn] = temp[isbn]+qty
                     else:
                         temp[isbn]= qty
-                    
+
 
                     if temp[isbn] > book.stock:
                         print 'Insufficient Stock!'
@@ -82,7 +82,7 @@ def book(request,isbn):
                     else:
                         print temp
                         request.session["orders"] = temp
-                        return HttpResponseRedirect('/homepage/checkout') 
+                        return HttpResponseRedirect('/homepage/checkout')
 
                 else:
                     print ('Login to order')
@@ -124,7 +124,7 @@ def login(request):
                 request.session["loginid"] = login
                 request.session["login"]= True
                 request.session["orders"] = dict()
-                request.session.set_expiry(3000) 
+                request.session.set_expiry(3000)
                 return HttpResponseRedirect('/homepage/')
     else:
         form = loginform()
@@ -137,11 +137,11 @@ def login(request):
     return render(request, 'login.html', {'form': form})
 
 def registration(request):
-    
+
     success = False
 
     if request.method == 'POST':
-        print(request.POST['fullname'])     
+        print(request.POST['fullname'])
         regform = RegForm(request.POST)
 
         if regform.is_valid():
@@ -170,8 +170,8 @@ def registration(request):
                     p = Customers(fullname = fullname, loginid = login, pw =pw, majorccn = majorccn, address = address, phonenum = phonenum)
                     p.save()
                     print('account created!')
-                    request.session["login"]= True  
-                    success = True          
+                    request.session["login"]= True
+                    success = True
             else:
                 print('username taken!')
     else:
@@ -185,7 +185,7 @@ def registration(request):
     return render(request,'registration.html', {'regform':regform, 'success':success})
 
 def advsearch(request):
-    
+
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
@@ -260,3 +260,21 @@ def user(request):
 
     return render (request,'user.html',{'user':user, 'orders':orders, 'feedbacks':feedbacks,'ratings':ratings,'login':login,'loginid':loginid})
 
+def admin(request):
+    if "login" in request.session and "loginid" in request.session:
+        login = request.session["login"]
+        loginid = request.session["loginid"]
+        user = Customers.objects.filter(loginid=loginid).values()[0]
+        cursor = connection.cursor()
+
+        #cursor.execute("SELECT books.title, feedbacks.review, feedbacks.optionalComment FROM books,feedbacks WHERE feedbacks.loginID = %s AND books.ISBN = feedbacks.ISBN",[loginid])
+        cursor.execute("SELECT books.title, order_items.isbn AS isbn, sum(order_items.qty) FROM books,order_items,orders WHERE order_items.oid = orders.oid AND orders.order_status=%s AND books.isbn = order_items.isbn group by order_items.isbn order by sum(order_items.qty) DESC LIMIT 5",["Payment Received"])
+        #select ISBN, sum(qty) from order_items inner join orders where order_items.oid = orders.oid and orders.order_status='Payment Received' group by ISBN order by sum(qty) DESC limit m
+        feedbacks = cursor.fetchall()
+        cursor.execute("SELECT books.title AS title, ratings.rating AS rating, ratings.ratingID AS rid FROM books,ratings WHERE ratings.feedbackID = %s AND books.ISBN = ratings.ISBN",[loginid])
+        ratings = cursor.fetchall()
+        cursor.execute("SELECT orders.oid, books.title, order_items.qty, orders.order_date, orders.order_status FROM books,orders,order_items WHERE orders.loginID = %s AND orders.oid = order_items.oid AND order_items.ISBN = books.ISBN",[loginid])
+        orders = cursor.fetchall()
+        cursor.close()
+
+    return render (request,'admin.html',{'user':user, 'orders':orders, 'feedbacks':feedbacks,'ratings':ratings,'login':login,'loginid':loginid})
