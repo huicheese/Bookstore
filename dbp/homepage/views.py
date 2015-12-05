@@ -15,7 +15,7 @@ from django.db import connection
 
 def homepage(request):
 
-    q = Books.objects.all()
+    q = Books.objects.all().order_by('?')[:9]
 
     if "login" in request.session and "loginid" in request.session:
         login = request.session["login"]
