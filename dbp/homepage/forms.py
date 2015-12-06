@@ -10,7 +10,7 @@ class loginform(forms.Form):
     pw = forms.CharField(label='Password', max_length=10, widget=forms.PasswordInput)
 
 class advsearchform(forms.Form):
-    author = forms.CharField(label='Author')
+    authors = forms.CharField(label='Authors')
     publisher = forms.CharField(label='Publisher')
     title = forms.CharField(label='Title')
     subject = forms.CharField(label='Subject')

@@ -228,28 +228,52 @@ def registration(request):
 
 def advsearch(request):
 
-    # if this is a POST request we need to process the form data
     if request.method == 'POST':
-        # create a form instance and populate it with data from the request:
-        searchform = advsearchform(request.POST)
-        # check whether it's valid:
-        if searchform.is_valid():
-            author = searchform.cleaned_data['author']
-            publisher = searchform.cleaned_data['publisher']
-            title = searchform.cleaned_data['title']
-            subject = searchform.cleaned_data['subject']
-            q = Customers.objects.filter(loginid=search)
-            if not q:
-                print 'Wrong LoginID'
-            elif q.values('pw')[0]['pw'] != pw:
-                print 'Wrong password'
+        if 'sorting' in request.POST:
+            authors = request.session['authors']
+            publisher = request.session['publisher']
+            title = request.session['title']
+            subject = request.session['subject']
+            sorter = request.POST['sorting']
+            if sorter == 'asc_year':
+                q = Books.objects.filter(title__contains=title,authors__contains=authors,publisher__contains=publisher,subject__contains=subject).order_by('yearpublished')
+            elif sorter == 'desc_year':
+                q = Books.objects.filter(title__contains=title,authors__contains=authors,publisher__contains=publisher,subject__contains=subject).order_by('-yearpublished')
+            elif sorter == 'asc_score':
+                q = Books.objects.raw("SELECT * FROM Books INNER JOIN (SELECT avg(review) A, ISBN FROM feedbacks GROUP BY ISBN) T ON Books.ISBN=T.ISBN WHERE Books.subject LIKE %s OR Books.title LIKE %s OR Books.authors LIKE %s OR Books.publisher LIKE %s ORDER BY T.A ASC", [subject, title, authors, publisher])
+            elif sorter == 'desc_score':
+                q = Books.objects.raw("SELECT * FROM Books INNER JOIN (SELECT avg(review) A, ISBN FROM feedbacks GROUP BY ISBN) T ON Books.ISBN=T.ISBN WHERE Books.subject LIKE %s OR Books.title LIKE %s OR Books.authors LIKE %s OR Books.publisher LIKE %s ORDER BY T.A DESC", [subject, title, authors, publisher])
             else:
-                print 'Login Successful!'
-                #Session object created here
-                request.session["login"]= True
-                return HttpResponseRedirect('/homepage/')
+                q = Books.objects.filter(title__contains=title,authors__contains=authors,publisher__contains=publisher,subject__contains=subject)
+            if "login" in request.session and "loginid" in request.session:
+                login = request.session["login"]
+                loginid = request.session["loginid"]
+                return render(request, 'results.html', {'login':login,'loginid':loginid, 'booklist':q})
+
+            return render(request, 'results.html', {'booklist':q})
+        # create a form instance and populate it with data from the request:
+        form = advsearchform(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            authors = form.cleaned_data['authors'].lstrip()
+            publisher = form.cleaned_data['publisher'].lstrip()
+            title = form.cleaned_data['title'].lstrip()
+            subject = form.cleaned_data['subject'].lstrip()
+            request.session['authors']=authors
+            request.session['publisher']=publisher
+            request.session['title']=title
+            request.session['subject']=subject
+            q = Books.objects.filter(title__contains=title,authors__contains=authors,publisher__contains=publisher,subject__contains=subject)
+            if "login" in request.session and "loginid" in request.session:
+                login = request.session["login"]
+                loginid = request.session["loginid"]
+                return render(request, 'results.html', {'form': form,'login':login,'loginid':loginid, 'booklist':q})
+
+            return render(request, 'results.html', {'form': form, 'booklist':q})
+
+
     else:
-        form = advsearchform()
+        form = advsearchform(initial={'authors':' ', 'publisher':' ', 'title':' ', 'subject':' '})
 
     if "login" in request.session and "loginid" in request.session:
         login = request.session["login"]
