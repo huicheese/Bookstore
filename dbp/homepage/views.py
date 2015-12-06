@@ -3,8 +3,9 @@ from django.shortcuts import render, render_to_response
 # Create your views here.
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
-from django.db.models import Max
+from django.db.models import Max, Q
 from models import Customers, Orders, Books, Feedbacks,Orders,OrderItems, Ratings
+from django.template import RequestContext
 
 from .forms import loginform, RegForm, BookForm, advsearchform, FeedbackForm, ViewForm
 
@@ -29,8 +30,6 @@ def signout(request):
     return HttpResponseRedirect('/homepage/')
 
 def book(request,isbn):
-
-
     q = Books.objects.filter(isbn=isbn)
     p = Feedbacks.objects.filter(isbn=isbn)
 
@@ -259,6 +258,44 @@ def advsearch(request):
 
     return render(request, 'advsearch.html', {'form': form})
 
+def search(request):
+    query_string = ''
+    found_entries = None
+    if ('q' in request.GET) and request.GET['q'].strip():
+        query_string = request.GET['q']
+
+        entry_query = get_query(query_string, ['title'])
+
+        found_entries = Books.objects.filter(entry_query).order_by('title')
+        print query_string
+        print entry_query
+        print found_entries
+    return render_to_response('results.html',
+                          { 'query_string': query_string, 'found_entries': found_entries },
+                          context_instance=RequestContext(request))
+
+def normalize_query(query_string,
+                    findterms=re.compile(r'"([^"]+)"|(\S+)').findall,
+                    normspace=re.compile(r'\s{2,}').sub):
+    return [normspace(' ', (t[0] or t[1]).strip()) for t in findterms(query_string)]
+
+def get_query(query_string, search_fields):
+    query = None # Query to search for every search term
+    terms = normalize_query(query_string)
+    for term in terms:
+        or_query = None # Query to search for a given term in each field
+        for field_name in search_fields:
+            q = Q(**{"%s__icontains" % field_name: term})
+            if or_query is None:
+                or_query = q
+            else:
+                or_query = or_query | q
+        if query is None:
+            query = or_query
+        else:
+            query = query & or_query
+    return query
+
 def checkout(request):
 
     # Get the Customer Object and Book Object
@@ -278,13 +315,14 @@ def checkout(request):
     #Save object item
     # order_item = OrderItems(isbn=book,oid=order[0],qty=qty)
     # order_item.save()
-
+    form = loginform(request.POST)
     if "login" in request.session and "loginid" in request.session:
+
         login = request.session["login"]
         loginid = request.session["loginid"]
         return render (request,'checkout.html',{'login':login,'loginid':loginid})
-
-    return render (request,'checkout.html')
+    else:
+        return HttpResponseRedirect('/homepage/login')
 
 def user(request):
     if "login" in request.session and "loginid" in request.session:
