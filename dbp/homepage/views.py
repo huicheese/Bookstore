@@ -366,20 +366,20 @@ def user(request):
     return render (request,'user.html',{'user':user, 'orders':orders, 'feedbacks':feedbacks,'ratings':ratings,'login':login,'loginid':loginid})
 
 def admin(request):
+    try:
+        Resultm=int(request.GET.get('Resultsm'))
+    except:
+        Resultm=5
     if "login" in request.session and "loginid" in request.session:
         login = request.session["login"]
         loginid = request.session["loginid"]
         user = Customers.objects.filter(loginid=loginid).values()[0]
         cursor = connection.cursor()
-
-        #cursor.execute("SELECT books.title, feedbacks.review, feedbacks.optionalComment FROM books,feedbacks WHERE feedbacks.loginID = %s AND books.ISBN = feedbacks.ISBN",[loginid])
-        cursor.execute("SELECT books.title, order_items.isbn AS isbn, sum(order_items.qty) FROM books,order_items,orders WHERE order_items.oid = orders.oid AND orders.order_status=%s AND books.isbn = order_items.isbn group by order_items.isbn order by sum(order_items.qty) DESC LIMIT 5",["Payment Received"])
-        #select ISBN, sum(qty) from order_items inner join orders where order_items.oid = orders.oid and orders.order_status='Payment Received' group by ISBN order by sum(qty) DESC limit m
-        feedbacks = cursor.fetchall()
-        cursor.execute("SELECT books.title AS title, ratings.rating AS rating, ratings.ratingID AS rid FROM books,ratings WHERE ratings.feedbackID = %s AND books.ISBN = ratings.ISBN",[loginid])
-        ratings = cursor.fetchall()
-        cursor.execute("SELECT orders.oid, books.title, order_items.qty, orders.order_date, orders.order_status FROM books,orders,order_items WHERE orders.loginID = %s AND orders.oid = order_items.oid AND order_items.ISBN = books.ISBN",[loginid])
-        orders = cursor.fetchall()
-        cursor.close()
-
+    cursor.execute("SELECT books.title, order_items.isbn AS isbn, sum(order_items.qty) FROM books,order_items,orders WHERE order_items.oid = orders.oid AND orders.order_status=%s AND books.isbn = order_items.isbn group by order_items.isbn order by sum(order_items.qty) DESC LIMIT %s",["Payment Received",str(Resultm)])
+    feedbacks = cursor.fetchall()
+    cursor.execute("SELECT books.authors, SUM(sqt) from (SELECT ISBN as tis, SUM(order_items.qty) as sqt from order_items INNER JOIN orders WHERE order_items.oid = orders.oid AND orders.order_status=%s GROUP BY ISBN ORDER BY SUM(qty)) as a INNER JOIN books where tis=books.ISBN GROUP BY books.authors ORDER BY SUM(sqt) DESC LIMIT %s",["Payment Received",str(Resultm)])
+    ratings = cursor.fetchall()
+    cursor.execute("SELECT books.publisher, sum(sqt) from (SELECT ISBN as tis, sum(order_items.qty) as sqt from order_items INNER JOIN orders WHERE order_items.oid = orders.oid AND orders.order_status=%s group by ISBN order by sum(qty)) as a inner join books where tis=books.ISBN group by books.publisher order by SUM(sqt) DESC limit %s",["Payment Received",str(Resultm)])
+    orders = cursor.fetchall()
+    cursor.close()
     return render (request,'admin.html',{'user':user, 'orders':orders, 'feedbacks':feedbacks,'ratings':ratings,'login':login,'loginid':loginid})

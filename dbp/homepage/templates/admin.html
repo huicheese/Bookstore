@@ -53,13 +53,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         	$('.signin .signedout').toggle();
         	$('.signin .signedin').toggle();
         }
-        // $('.dropdown p').click(function(){
-        // 	$(this).parent().find('table').toggle('slow');
-        // });
 
     });
 </script>
-<!---- tabs---->
 
 </head>
 <body>
@@ -71,23 +67,16 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				 <ul>
 				 <li class="active"><a href="/homepage/">HOME</a></li>
 				 </ul>
-				 <!-- script-for-menu -->
 				 <script>
 						$("span.menu").click(function(){
 							$(".top-menu ul").slideToggle("slow" , function(){
 							});
 						});
 				 </script>
-				 <!-- script-for-menu -->
 
 			 </div>
 		 </div>
 		 <div class="header-right">
-			 <!-- <div class="currency">
-				 <a href="#"><i class="c1"></i></a>
-				 <a class="active" href="#"><i class="c2"></i></a>
-				 <a href="#"><i class="c3"></i></a>
-				 <a href="#"><i class="c4"></i></a>
 			 </div>	 -->
 			 <div class="signin">
 				  <div class="cart-sec">
@@ -121,93 +110,17 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <div class="tab-section">
 	 <div class="wrap">
 		 <div id="horizontalTab">
-		 		<h1>User Profile</h1>
+		 		<h1>Admin Statistics</h1>
 		 		<h3>Welcome {{loginid}}!</h3>
-		 		<div class='dropdown acctinfo'><p>Acct Info</p>
-		 			<table class='table table-hover'>
-		 				<thead>
-		 					<tr>
-		 						<th>Profile</th>
-		 						<th></th>
-		 					</tr>
-		 				</thead>
-		 				<tbody>
-		 					<tr>
-		 						<td>Full Name:</td>
-		 						<td>{{user.fullname}}</td>
-		 					</tr>
-		 					<tr>
-		 						<td>Login ID:</td>
-		 						<td>{{user.loginid}}</td>
-		 					</tr>
-		 					<tr>
-		 						<td>Password:</td>
-		 						<td>{{user.pw}}</td>
-		 					</tr>
-		 					<tr>
-		 						<td>Major Credit Card Number:</td>
-		 						<td>{{user.majorccn}}</td>
-		 					</tr>
-		 					<tr>
-		 						<td>Address:</td>
-		 						<td>{{user.address}}</td>
-		 					</tr>
-		 					<tr>
-		 						<td>Phone Nymber:</td>
-		 						<td>{{user.phonenum}}</td>
-		 					</tr>
-
-		 				</tbody>
-		 			</table>
-
-		 		</div>
-		 		<div class='dropdown order'><p>Order</p>
-			 		<table class="table table-hover">
-			 			<thead>
-			 				<tr>
-			 					<th>Order No.</th>
-			 					<th>Order Item</th>
-			 					<th>Qty</th>
-			 					<th>Date</th>
-			 					<th>Status</th>
-			 				</tr>
-			 			</thead>
-			 			<tbody>
-			 				<!-- <tr>
-			 					<td rowspan="2">Oid</td>
-			 					<td>book 1</td>
-			 					<td>9999</td>
-			 					<td rowspan="2">dd:mm:yyy</td>
-			 					<td rowspan="2">Shipped</td>
-			 				</tr>
-			 				<tr>
-			 					<td>book 1</td>
-			 					<td>9999</td>
-			 				</tr>
-			 				<tr>
-			 					<td rowspan="2">Oid2</td>
-			 					<td>book 1</td>
-			 					<td>9999</td>
-			 					<td rowspan="2">dd:mm:yyy</td>
-			 					<td rowspan="2">Shipped</td>
-			 				</tr>
-			 				<tr>
-			 					<td>book 1</td>
-			 					<td>9999</td>
-			 				</tr> -->
-			 				{% for order in orders %}
-			 				<tr>
-			 					{%for i in order %}
-
-				 					<td>{{i}}</td>
-
-			 					{% endfor %}
-			 				</tr>
-			 				{% endfor %}
-			 			</tbody>
-			 		</table>
-		 		</div>
-		 		<div class='dropdown feedback'><p>Feedback</p>
+				<div class="spacing">
+					<br />
+					<br />
+			  	</div>	
+			 <form action="/homepage/admin">
+				Number of Results: <input type="number" min = "1" step = "1" name="Resultsm" >
+				<input type="submit" value="Search">
+			</form>
+		 		<div class='dropdown feedback'><h3>Most popular books</h3>
 		 			<table class="table table-hover">
 		 				<thead>
 		 					<tr>
@@ -229,36 +142,49 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		 				</tbody>
 		 			</table>
 		 		</div>
-		 		<div class='dropdown rating'><p>Rating</p>
+		 		<div class='dropdown order'><h3>Most popular publishers</h3>
 			 		<table class="table table-hover">
 			 			<thead>
 			 				<tr>
-			 					<th>Feedback on Book:</th>
-			 					<th>Rating</th>
-			 					<th>Rated By</th>
+			 					<th>Authors</th>
+			 					<th>Quantity</th>
 			 				</tr>
 			 			</thead>
 			 			<tbody>
-			 			{% for rating in ratings %}
+			 				{% for author in orders %}
 			 				<tr>
-			 					{%for i in rating %}
+			 					{%for i in author %}
 
-				 					{% if rating.rating == 0 %}
-				 						<td>Not Helpful</td>
-				 					{% elif rating.rating == 1 %}
-				 						<td>Helpful</td>
-				 					{% elif rating.rating == 2 %}
-				 						<td>Very Helpful</td>
-				 					{% else %}
-				 						<td>{{i}}</td>
-				 					{% endif %}
+				 					<td>{{i}}</td>
 
 			 					{% endfor %}
 			 				</tr>
-			 			{% endfor %}
+			 				{% endfor %}
 			 			</tbody>
 			 		</table>
 		 		</div>
+		 		<div class='dropdown order'><h3>Most popular authors</h3>
+			 		<table class="table table-hover">
+			 			<thead>
+			 				<tr>
+			 					<th>Authors</th>
+			 					<th>Quantity</th>
+			 				</tr>
+			 			</thead>
+			 			<tbody>
+			 				{% for order in ratings %}
+			 				<tr>
+			 					{%for i in order %}
+
+				 					<td>{{i}}</td>
+
+			 					{% endfor %}
+			 				</tr>
+			 				{% endfor %}
+			 			</tbody>
+			 		</table>
+		 		</div>
+		 		
 		 </div>
 	 </div>
 	 <div class="container">
