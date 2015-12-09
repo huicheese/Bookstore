@@ -357,7 +357,7 @@ def user(request):
 
         cursor.execute("SELECT books.title, feedbacks.review, feedbacks.optionalComment FROM books,feedbacks WHERE feedbacks.loginID = %s AND books.ISBN = feedbacks.ISBN",[loginid])
         feedbacks = cursor.fetchall()
-        cursor.execute("SELECT books.title AS title, ratings.rating AS rating, ratings.ratingID AS rid FROM books,ratings WHERE ratings.feedbackID = %s AND books.ISBN = ratings.ISBN",[loginid])
+        cursor.execute("SELECT books.title, ratings.feedbackID, ratings.rating FROM books,ratings WHERE ratings.ratingID = %s AND books.ISBN = ratings.ISBN order by ratings.rating DESC",[loginid])
         ratings = cursor.fetchall()
         cursor.execute("SELECT orders.oid, books.title, order_items.qty, orders.order_date, orders.order_status FROM books,orders,order_items WHERE orders.loginID = %s AND orders.oid = order_items.oid AND order_items.ISBN = books.ISBN",[loginid])
         orders = cursor.fetchall()

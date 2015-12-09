@@ -234,8 +234,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			 			<thead>
 			 				<tr>
 			 					<th>Feedback on Book:</th>
-			 					<th>Rating</th>
-			 					<th>Rated By</th>
+			 					<th>Feedback by</th>
+			 					<th>You Rated</th>
 			 				</tr>
 			 			</thead>
 			 			<tbody>
@@ -243,17 +243,17 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			 				<tr>
 			 					{%for i in rating %}
 			 					
-				 					{% if rating.rating == 0 %}
+				 					{% if i == 0 %}
 				 						<td>Not Helpful</td>
-				 					{% elif rating.rating == 1 %}
+				 					{% elif i == 1 %}
 				 						<td>Helpful</td>
-				 					{% elif rating.rating == 2 %}
+				 					{% elif i == 2 %}
 				 						<td>Very Helpful</td>
 				 					{% else %}
 				 						<td>{{i}}</td>
 				 					{% endif %}
 
-			 					{% endfor %}
+			 				s	{% endfor %}
 			 				</tr>
 			 			{% endfor %}
 			 			</tbody>
