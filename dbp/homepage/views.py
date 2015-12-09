@@ -232,19 +232,28 @@ def advsearch(request):
 
     if request.method == 'POST':
         if 'sorting' in request.POST:
-            authors = request.session['authors']
-            publisher = request.session['publisher']
-            title = request.session['title']
-            subject = request.session['subject']
+            print 3
+            authors = request.session['authors'].lstrip()
+            publisher = request.session['publisher'].lstrip()
+            title = request.session['title'].lstrip()
+            subject = request.session['subject'].lstrip()
             sorter = request.POST['sorting']
             if sorter == 'asc_year':
                 q = Books.objects.filter(title__contains=title,authors__contains=authors,publisher__contains=publisher,subject__contains=subject).order_by('yearpublished')
             elif sorter == 'desc_year':
                 q = Books.objects.filter(title__contains=title,authors__contains=authors,publisher__contains=publisher,subject__contains=subject).order_by('-yearpublished')
             elif sorter == 'asc_score':
-                q = Books.objects.raw("SELECT * FROM Books INNER JOIN (SELECT avg(review) A, ISBN FROM feedbacks GROUP BY ISBN) T ON Books.ISBN=T.ISBN WHERE Books.subject LIKE %s OR Books.title LIKE %s OR Books.authors LIKE %s OR Books.publisher LIKE %s ORDER BY T.A ASC", [subject, title, authors, publisher])
+                subject = '%' + subject + '%'
+                authors = '%' + authors + '%'
+                title = '%' + title + '%'
+                publisher = '%' + publisher + '%'
+                q = Books.objects.raw("SELECT * FROM Books INNER JOIN (SELECT AVG(review) A, ISBN FROM Feedbacks GROUP BY ISBN) T ON Books.ISBN=T.ISBN WHERE Books.subject LIKE %s OR Books.title LIKE %s OR Books.authors LIKE %s OR Books.publisher LIKE %s ORDER BY T.A ASC", [subject, title, authors, publisher])
             elif sorter == 'desc_score':
-                q = Books.objects.raw("SELECT * FROM Books INNER JOIN (SELECT avg(review) A, ISBN FROM feedbacks GROUP BY ISBN) T ON Books.ISBN=T.ISBN WHERE Books.subject LIKE %s OR Books.title LIKE %s OR Books.authors LIKE %s OR Books.publisher LIKE %s ORDER BY T.A DESC", [subject, title, authors, publisher])
+                subject = '%' + subject + '%'
+                authors = '%' + authors + '%'
+                title = '%' + title + '%'
+                publisher = '%' + publisher + '%'
+                q = Books.objects.raw("SELECT * FROM Books INNER JOIN (SELECT AVG(review) A, ISBN FROM Feedbacks GROUP BY ISBN) T ON Books.ISBN=T.ISBN WHERE Books.subject LIKE %s OR Books.title LIKE %s OR Books.authors LIKE %s OR Books.publisher LIKE %s ORDER BY T.A DESC", [subject, title, authors, publisher])
             else:
                 q = Books.objects.filter(title__contains=title,authors__contains=authors,publisher__contains=publisher,subject__contains=subject)
             if "login" in request.session and "loginid" in request.session:
