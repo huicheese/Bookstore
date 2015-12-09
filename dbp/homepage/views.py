@@ -370,6 +370,7 @@ def checkout(request):
         recotitle = []
         recoprice = []
         recodetails = []
+        recodetailsdict = {}
         for i in range(len(recommendations)):
             booktitle = Books.objects.filter(isbn = recommendations[i][0])[0].title
             bookauthor = Books.objects.filter(isbn = recommendations[i][0])[0].authors
@@ -379,8 +380,16 @@ def checkout(request):
             recotitle.append(booktitle)
             recoprice.append(bookprice)
             recoimg.append(bookimg)
-            recodetails.append([bookauthor, booktitle, bookprice])
+            # recodetails.append([booktitle,bookauthor,bookprice])
+            recodetailsdict['isbn'] = recommendations[i][0]
+            recodetailsdict['title'] = booktitle
+            recodetailsdict['author'] = bookauthor
+            recodetailsdict['price'] = bookprice
+            recodetailsdict['img'] = bookimg
+            recodetails.append(recodetailsdict)
             i+=1
+
+        print "recodetailsdict ", recodetails
 
         cursor.close()
 
@@ -432,7 +441,7 @@ def checkout(request):
                 orders = cursor.fetchall()
                 cursor.close()
                 # create orders
-                order = Orders.objects.create(loginid=customer,order_date=str(datetime.now()),order_status="Payment Received")
+                order = Orders.objects.create(loginid=customer,order_date=str(datetime.now()),order_status="Pending Order")
                 oid = Orders.objects.filter(loginid=customer).order_by('-order_date')[0]
                 for isbn, qty in temp.iteritems():
                     isbnin = Books.objects.get(isbn=isbn)
@@ -445,13 +454,11 @@ def checkout(request):
                     print "temp after deletion ", temp
                 print "temp ", request.session["orders"]
 
-                return HttpResponseRedirect('/homepage/')
+                return render(request,'user.html',{'user':user, 'orders':orders, 'feedbacks':feedbacks,'ratings':ratings,'login':login,'loginid':loginid})
 
-        return render (request,'checkout.html',{'login':login,'loginid':loginid,  'temp': temp, 'bookdetails': bookdetails, 'recommendations': recommendations, 'recoimg': recoimg, 'recotitle': recotitle, 'recoauthor': recoauthor, 'recodetails': recodetails,'recoprice': recoprice, 'bookimages': bookimages})
+        return render (request,'checkout.html',{'login':login,'loginid':loginid,  'temp': temp, 'bookdetails': bookdetails, 'recommendations': recommendations, 'recoimg': recoimg, 'recotitle': recotitle, 'recoauthor': recoauthor, 'recodetails': recodetails,'recoprice': recoprice, 'bookimages': bookimages, 'recodetailsdict': recodetailsdict})
     else:
         return HttpResponseRedirect('/homepage/login')
-
-
 def user(request):
     if "login" in request.session and "loginid" in request.session:
         login = request.session["login"]

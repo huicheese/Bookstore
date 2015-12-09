@@ -90,7 +90,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			 </div>	 -->
 			 <div class="signin">
 				  <div class="cart-sec">
-				  <a href="checkout"><img href="checkout" src="http://www.googledrive.com/host/0B29ma7grVtkQc2VwblhsSkU4c2M/cart.png" alt=""/></a></div>
+				  <a href="checkout"><img href="checkout" src="http://www.googledrive.com/host/0B29ma7grVtkQc2VwblhsSkU4c2M/cart.png" alt=""/>(0)</a></div>
 				  <ul>
 					 <li class='signedout'><a href="registration">REGISTRATION</a>
 					 <span>/<span> &nbsp;</li>
@@ -169,17 +169,16 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
            <div>
              <div class="course_demo1" style="background-color:#eeeeee;">
 
-             {% for d in recodetails %}
+             {% for recodetail in recodetails %}
               {% if forloop.counter|divisibleby:3 %}
                 <div class="row">
               {% endif %}
                <div class="col-xs-6 col-sm-4 span12">
-                    <!-- <a href="book/{{book.isbn}}"><img class="center-block" src="{{x}}" alt="" style ="width:200px"/></a> -->
-                    {% for i in d %}
-                    <h3 class="text-center">{{i}}</h3>
-                    <!-- <h5 class="text-center">{{x}} &euro;</h5> -->
+                    <a href="book/{{recodetail.isbn}}"><img style="width:200px" class="center-block" src="{{recodetail.img}}" alt="" style ="width:200px"/></a>
+                    <h3 class="text-center">{{recodetail.title}}</h3>
+                    <h4 class="text-center">{{recodetail.author}}</h4>
+                    <h5 class="text-center">{{recodetail.price}}</h5>
                     <div class="clearfix"></div>
-                    {% endfor %}
               </div>
               {% if forloop.counter|divisibleby:3 %}
                 </div>
