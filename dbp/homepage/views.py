@@ -8,8 +8,7 @@ from models import Customers, Orders, Books, Feedbacks,Orders,OrderItems, Rating
 from django.template import RequestContext
 import ast
 
-from .forms import loginform, RegForm, BookForm, advsearchform, FeedbackForm, ViewForm
-
+from .forms import loginform, RegForm, BookForm, advsearchform, FeedbackForm, ViewForm, removeForm, checkoutForm
 from datetime import datetime
 #for regrex
 import re
@@ -423,7 +422,7 @@ def checkout(request):
                 orders = cursor.fetchall()
                 cursor.close()
                 # create orders
-                order = Orders.objects.create(loginid=customer,order_date=str(datetime.now()),order_status="Pending Order")
+                order = Orders.objects.create(loginid=customer,order_date=str(datetime.now()),order_status="Payment Received")
                 oid = Orders.objects.filter(loginid=customer).order_by('-order_date')[0]
                 for isbn, qty in temp.iteritems():
                     isbnin = Books.objects.get(isbn=isbn)
