@@ -138,6 +138,7 @@ def book(request,isbn):
         user = Customers.objects.filter(loginid=loginid).values()[0]
         cursor = connection.cursor()
         print isbn
+        viewform = ViewForm(viewdefault)
         cursor.execute("SELECT feedbacks.loginID, feedbacks.review, feedbacks.optionalComment from feedbacks where (feedbacks.ISBN = %s) AND feedbacks.loginID IN (select feedbackID from (select * from ratings where ratings.ISBN=%s) group by feedbackID ORDER BY avg(rating) DESC LIMIT %s)",[isbn,isbn,num])
         views = cursor.fetchall()
         cursor.close()
@@ -214,6 +215,7 @@ def registration(request):
                     print('account created!')
                     request.session["login"]= True
                     success = True
+                    return HttpResponseRedirect('/homepage/')
             else:
                 print('username taken!')
     else:
@@ -435,7 +437,7 @@ def checkout(request):
                     print "temp after deletion ", temp
                 print "temp ", request.session["orders"]
 
-                return render(request,'user.html',{'user':user, 'orders':orders, 'feedbacks':feedbacks,'ratings':ratings,'login':login,'loginid':loginid})
+                return HttpResponseRedirect('/homepage/')
 
         return render (request,'checkout.html',{'login':login,'loginid':loginid,  'temp': temp, 'bookdetails': bookdetails, 'recommendations': recommendations, 'recoimg': recoimg, 'recotitle': recotitle, 'recoauthor': recoauthor, 'recodetails': recodetails,'recoprice': recoprice, 'bookimages': bookimages})
     else:

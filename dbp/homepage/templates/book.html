@@ -55,7 +55,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 			 <div class="signin">
 				  <div class="cart-sec">
-				  <a href="checkout"><img href="checkout" src="http://www.googledrive.com/host/0B29ma7grVtkQc2VwblhsSkU4c2M/cart.png" alt=""/>(0)</a></div>
+				  <a href="checkout"><img href="checkout" src="http://www.googledrive.com/host/0B29ma7grVtkQc2VwblhsSkU4c2M/cart.png" alt=""/></a></div>
 				  <ul>
 					 <li class='signedout'><a href="registration">REGISTRATION</a>
 					 <span>/<span> &nbsp;</li>
@@ -103,39 +103,41 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					{% endif %}
 			  </div>
 
-        <form id='viewform'  method = 'post'>
-          {{viewform|linebreaks}}
-          {% csrf_token %}
-          <br>
-          <input type ="submit" value="Filter">
-        </form>
-        <br>
-        <div>
-            <table id='viewtable' style="width:100%">
-            <thead>
-              <th>User</th>
-              <th>Feedback</th>
-              <th>Comment</th>
-            </thead>
-            <tbody>
-              <tbody>
-              {% for feedback in views %}
-                <tr>
-                  {% for i in feedback%}
-                  <td>{{i}}</td>
-                  {% endfor %}
-                </tr>
-              {% endfor %}
-              </tbody>
-            </table>
-        </div>
+        
 			 <div class="product-id">
 			 	<form method = 'post'>
 				 	{{bookform|linebreaks }}
 					{% csrf_token %}
           <input class='add' type="submit" value="ADD TO CART">
 				</form>
-				<br><br>
+				<br>
+
+				<form id='viewform'  method = 'post'>
+		          {{viewform|linebreaks}}
+		          {% csrf_token %}
+		          <br>
+		          <input type ="submit" value="Filter">
+		        </form>
+		        <br>
+		        <div>
+		            <table id='viewtable' style="width:100%">
+		            <thead>
+		              <th>User</th>
+		              <th>Feedback</th>
+		              <th>Comment</th>
+		            </thead>
+		            <tbody>
+		              <tbody>
+		              {% for feedback in views %}
+		                <tr>
+		                  {% for i in feedback%}
+		                  <td>{{i}}</td>
+		                  {% endfor %}
+		                </tr>
+		              {% endfor %}
+		              </tbody>
+		            </table>
+		        </div>
 
 
 
