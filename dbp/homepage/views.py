@@ -232,7 +232,6 @@ def advsearch(request):
 
     if request.method == 'POST':
         if 'sorting' in request.POST:
-            print 3
             authors = request.session['authors'].lstrip()
             publisher = request.session['publisher'].lstrip()
             title = request.session['title'].lstrip()
