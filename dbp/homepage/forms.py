@@ -36,3 +36,9 @@ class FeedbackForm(forms.Form):
     CHOICES = (('1', '1',), ('2', '2',), ('3', '3',), ('4', '4',), ('5', '5',), ('6', '6',), ('7', '7',), ('8', '8',), ('9', '9',), ('10', '10',))
     feedback = forms.ChoiceField(label="Feedback", widget=forms.Select, choices=CHOICES)
     comment = forms.CharField(label="Comments(Optional)", required=False)
+
+class removeForm(forms.Form):
+    remove = forms.BooleanField(required = False)
+
+class checkoutForm(forms.Form):
+    checkout = forms.BooleanField(required = False)

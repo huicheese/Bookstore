@@ -6,6 +6,7 @@ from django.http import HttpResponseRedirect
 from django.db.models import Max, Q
 from models import Customers, Orders, Books, Feedbacks,Orders,OrderItems, Ratings
 from django.template import RequestContext
+import ast
 
 from .forms import loginform, RegForm, BookForm, advsearchform, FeedbackForm, ViewForm
 
@@ -322,31 +323,125 @@ def get_query(query_string, search_fields):
 
 def checkout(request):
 
-    # Get the Customer Object and Book Object
-    # if "loginid" in request.session:
-    # customer = Customers.objects.get(loginid=request.session["loginid"])
-    # book = Books.objects.get(isbn=isbn)
-
-    #Create the order object using the Book, Customer object (because they are foreign keys)
-    # Orders.objects.create(loginid=customer,order_date=str(datetime.now()),order_status="Pending Order")
-
-    #Get the order number (we do this because it's auto increment so we don't know what's the number)
-    # o=Orders.objects.filter(loginid=request.session['loginid']).order_by('-oid')[0]
-
-    #Get the order object
-    # order=Orders.objects.filter(oid=o.oid)
-
-    #Save object item
-    # order_item = OrderItems(isbn=book,oid=order[0],qty=qty)
-    # order_item.save()
     form = loginform(request.POST)
     if "login" in request.session and "loginid" in request.session:
-
         login = request.session["login"]
         loginid = request.session["loginid"]
-        return render (request,'checkout.html',{'login':login,'loginid':loginid})
+        temp = request.session["orders"]
+        print "temp at the top", temp
+        booklist = []
+        for isbn, qty in temp.iteritems():
+            booklist.append([isbn, qty])
+            print "booklist in loop: ", booklist
+
+        # to get a list of books with title, authors, price, picture
+        num = len(booklist)
+        bookdetails = []
+        bookimages = []
+        for x in range(0,num):
+            booktitle = Books.objects.filter(isbn = booklist[x][0])[0].title
+            bookauthor = Books.objects.filter(isbn = booklist[x][0])[0].authors
+            bookprice = Books.objects.filter(isbn = booklist[x][0])[0].price
+            bookimg = Books.objects.filter(isbn = booklist[x][0])[0].picture
+            bookisbn = booklist[x][0]
+            qty = booklist[x][1]
+            bookdetails.append([booktitle, bookauthor, bookisbn, bookprice, qty])
+            bookimages.append(bookimg)
+            x+=1
+
+        # customer = Customers.objects.get(loginid=request.session["loginid"])
+
+        # find recommendations
+        cursor = connection.cursor()
+        cursor.execute("SELECT ISBN, sum(qty) from (SELECT * from order_items INNER JOIN orders where order_items.oid=orders.oid and orders.order_status='Payment Received' and loginID<>%s) INNER JOIN (SELECT loginID as idl from order_items INNER JOIN orders where order_items.oid = orders.oid and orders.order_status='Payment Received' and loginID<>%s and ISBN='978-0253009081') GROUP BY ISBN ORDER BY sum(qty) DESC limit 3", [loginid, loginid])
+        recommendations = cursor.fetchall()
+        recolength = len(recommendations)
+        recoimg = []
+        recoauthor = []
+        recotitle = []
+        recoprice = []
+        recodetails = []
+        for i in range(len(recommendations)):
+            booktitle = Books.objects.filter(isbn = recommendations[i][0])[0].title
+            bookauthor = Books.objects.filter(isbn = recommendations[i][0])[0].authors
+            bookprice = Books.objects.filter(isbn = recommendations[i][0])[0].price
+            bookimg = Books.objects.filter(isbn=recommendations[i][0])[0].picture
+            recoauthor.append(bookauthor)
+            recotitle.append(booktitle)
+            recoprice.append(bookprice)
+            recoimg.append(bookimg)
+            recodetails.append([bookauthor, booktitle, bookprice])
+            i+=1
+
+        cursor.close()
+
+        # if press remove
+        if request.method == 'POST':
+            if 'bookrmv' in request.POST:
+                login = request.session["login"]
+                loginid = request.session["loginid"]
+                removeform = removeForm(request.POST)
+                if removeform.is_valid():
+                    bookdata = removeform.cleaned_data['remove']
+                    booktoremove = request.POST['bookrmv']
+                    # convert unicode to list
+                    booktoremove = ast.literal_eval(booktoremove)
+                    print "booktoremove ", booktoremove, type(booktoremove)
+                    # print "bookdetails", bookdetails, type(bookdetails)
+                    # print "bookdata", bookdata
+                    if bookdata == False:
+                        if booktoremove in bookdetails:
+                            print "in booktoremove loop"
+                            bookdetails.remove(booktoremove)
+                            del temp[booktoremove[2]]
+                            for i in booklist:
+                                if booktoremove[2] == i[0]:
+                                    # print "hi ", booklist.index(i), booklist[booklist.index(i)]
+                                    booklist.remove(i)
+                            request.session.modified = True
+                            # print "removed! ", bookdetails
+                            print "temp is now: ", temp
+                            print "booklist is now: ", booklist
+                        else:
+                            print "nope"
+                    else:
+                        print "nothing"
+
+            elif 'checkout' in request.POST:
+                print "i am in checkout"
+                login = request.session["login"]
+                loginid = request.session["loginid"]
+                customer = Customers.objects.get(loginid=loginid)
+                user = Customers.objects.filter(loginid=loginid).values()[0]
+                cursor = connection.cursor()
+                # populate data in the user page
+                cursor.execute("SELECT books.title, feedbacks.review, feedbacks.optionalComment FROM books,feedbacks WHERE feedbacks.loginID = %s AND books.ISBN = feedbacks.ISBN",[loginid])
+                feedbacks = cursor.fetchall()
+                cursor.execute("SELECT books.title AS title, ratings.rating AS rating, ratings.ratingID AS rid FROM books,ratings WHERE ratings.feedbackID = %s AND books.ISBN = ratings.ISBN",[loginid])
+                ratings = cursor.fetchall()
+                cursor.execute("SELECT orders.oid, books.title, order_items.qty, orders.order_date, orders.order_status FROM books,orders,order_items WHERE orders.loginID = %s AND orders.oid = order_items.oid AND order_items.ISBN = books.ISBN",[loginid])
+                orders = cursor.fetchall()
+                cursor.close()
+                # create orders
+                order = Orders.objects.create(loginid=customer,order_date=str(datetime.now()),order_status="Pending Order")
+                oid = Orders.objects.filter(loginid=customer).order_by('-order_date')[0]
+                for isbn, qty in temp.iteritems():
+                    isbnin = Books.objects.get(isbn=isbn)
+                    OrderItems.objects.create(oid = oid, isbn = isbnin, qty = qty)
+
+                #clean dictionary
+                print "temp ", request.session["orders"]
+                for key in request.session["orders"].keys():
+                    del request.session["orders"][key]
+                    print "temp after deletion ", temp
+                print "temp ", request.session["orders"]
+
+                return render(request,'user.html',{'user':user, 'orders':orders, 'feedbacks':feedbacks,'ratings':ratings,'login':login,'loginid':loginid})
+
+        return render (request,'checkout.html',{'login':login,'loginid':loginid,  'temp': temp, 'bookdetails': bookdetails, 'recommendations': recommendations, 'recoimg': recoimg, 'recotitle': recotitle, 'recoauthor': recoauthor, 'recodetails': recodetails,'recoprice': recoprice, 'bookimages': bookimages})
     else:
         return HttpResponseRedirect('/homepage/login')
+
 
 def user(request):
     if "login" in request.session and "loginid" in request.session:

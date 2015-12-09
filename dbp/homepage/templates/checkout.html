@@ -125,134 +125,74 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		 <br/><br/>
 		 <h4>Dear {{loginid}}, the following are your orders: </h4>
 		 <br/>
-		 <table class="table table-hover">
-		    <thead>
-		      <tr>
-		        <th>Book name</th>
-		        <th>Author</th>
-		        <th>Price</th>
-		        <th>Delete?</th>
-		      </tr>
-		    </thead>
-		    <tbody>
-		      <tr>
-		        <td>John</td>
-		        <td>Doe</td>
-		        <td>john@example.com</td>
-		        <td><button type="submit" style="background: none; border: none;" class="glyphicon glyphicon-remove"></button></td>
-		      </tr>
-		      <tr>
-		        <td>Mary</td>
-		        <td>Moe</td>
-		        <td>mary@example.com</td>
-		        <td><button type="submit" style="background: none; border: none;" class="glyphicon glyphicon-remove"></button></td>
-		      </tr>
-		      <tr>
-		        <td>July</td>
-		        <td>Dooley</td>
-		        <td>july@example.com</td>
-		        <td><button type="submit" style="background: none; border: none;" class="glyphicon glyphicon-remove"></button></td>
-		      </tr>
-		    </tbody>
-		  </table>
-		  <button class="glyphicon glyphicon-shopping-cart" style="background: none; border: none; float: right;"><h5> Proceed to checkout</h5></button>
-		  <br/>
+     <table class="table table-hover">
+       <thead>
+         <tr>
+           <th>Title</th>
+           <th>Authors</th>
+           <th>ISBN</th>
+           <th>Price per book</th>
+           <th>Quantity</th>
+           <th>Remove?</th>
+         </tr>
+       </thead>
+       <tbody>
+         {% for bookdetail in bookdetails %}
+         <tr>
+           {% for i in bookdetail%}
+           <!-- <td><img class='bookimg' style='width:10%; position:relative; left:0%;' src="{{i}}"></td> -->
+           <td>{{i}}</td>
+           {% endfor %}
+         <td><p>
+           <form method='post'>
+           {% csrf_token %}
+             <input type="hidden" name="bookrmv" value="{{bookdetail}}">
+             <input type ="submit" value="Remove">
+           </form>
+          </p></td>
+         </tr>
+         {% endfor %}
+       </tbody>
+     </table>
+     <form method='post'>
+       {% csrf_token %}
+		  <button class="glyphicon glyphicon-shopping-cart" name="checkout" style="background: none; border: none; float: right;" type="submit"><h5> Checkout</h5></button>
+    </form>
+      <br/>
 		  <br/>
 			   <ul class="resp-tabs-list">
-					<li><a href="#">RECOMMENDED FOR YOU</a></li>
+					<li>People also bought: </li>
 					<div class="clearfix"></div>
 			   </ul>
-			   <div class="resp-tabs-container">
+			   <div style="background-color: #eeeeee" class="resp-tabs-container">
 
-				 <div>
-					 <div class="course_demo1">
-							 <ul id="flexiselDemo1">
-								 <li class="g1">
-									 <img src="http://www.googledrive.com/host/0B29ma7grVtkQc2VwblhsSkU4c2M/c1.jpg" alt="" />
-										<a href="book"><div class="caption">
-										<span></span>
-										<h3>PRODUCT NAME</h3>
-										<h5>180.00 &euro;</h5>
-										</div></a>
-										<div class="clearfix"></div>
-								 </li>
-								 <li class="g1">
-									 <img src="http://www.googledrive.com/host/0B29ma7grVtkQc2VwblhsSkU4c2M/c2.jpg" alt="" />
-									 <a href="book"><div class="caption">
-										<span></span>
-										<h3>PRODUCT NAME</h3>
-										<h5>180.00 &euro;</h5>
-										</div></a>
-										<div class="clearfix"></div>
-								 </li>
-								 <li class="g1">
-									 <img src="http://www.googledrive.com/host/0B29ma7grVtkQc2VwblhsSkU4c2M/c3.jpg" alt="" />
-									 <a href="book"><div class="caption">
-										<span></span>
-										<h3>PRODUCT NAME</h3>
-										<h5>180.00 &euro;</h5>
-										</div></a>
-										<div class="clearfix"></div>
-								 </li>
-								 <li class="g1">
-									 <img src="http://www.googledrive.com/host/0B29ma7grVtkQc2VwblhsSkU4c2M/c4.jpg" alt="" />
-									 <a href="book"><div class="caption">
-										<span></span>
-										<h3>PRODUCT NAME</h3>
-										<h5>180.00 &euro;</h5>
-										</div></a>
-										<div class="clearfix"></div>
-								 </li>
-								 <li class="g1">
-									 <img src="http://www.googledrive.com/host/0B29ma7grVtkQc2VwblhsSkU4c2M/c1.jpg" alt="" />
-									 <a href="book"><div class="caption">
-										<span></span>
-										<h3>PRODUCT NAME</h3>
-										<h5>180.00 &euro;</h5>
-										</div></a>
-										<div class="clearfix"></div>
-								 </li>
-								 <li class="g1">
-									 <img src="http://www.googledrive.com/host/0B29ma7grVtkQc2VwblhsSkU4c2M/c3.jpg" alt="" />
-									 <a href="book"><div class="caption">
-										<span></span>
-										<h3>PRODUCT NAME</h3>
-										<h5>180.00 &euro;</h5>
-										</div></a>
-										<div class="clearfix"></div>
-								 </li>
-							 </ul>
-						 </div>
-						  <link rel="stylesheet" href="http://www.googledrive.com/host/0B29ma7grVtkQUHZYZGNiQ2RmcFE/flexslider.css" type="text/css" media="screen" />
-							<script type="text/javascript">
-						 $(window).load(function() {
-							$("#flexiselDemo1").flexisel({
-								visibleItems: 4,
-								animationSpeed: 1000,
-								autoPlay: true,
-								autoPlaySpeed: 6000,
-								pauseOnHover: true,
-								enableResponsiveBreakpoints: true,
-								responsiveBreakpoints: {
-									portrait: {
-										changePoint:480,
-										visibleItems: 1
-									},
-									landscape: {
-										changePoint:640,
-										visibleItems: 2
-									},
-									tablet: {
-										changePoint:768,
-										visibleItems: 3
-									}
-								}
-							});
+           <div>
+             <div class="course_demo1" style="background-color:#eeeeee;">
 
-						 });
-						  </script>
-						<script type="text/javascript" src="http://www.googledrive.com/host/0B29ma7grVtkQcnJIa2VTZVdOajg/jquery.flexisel.js"></script>
-				 </div>
+             {% for d in recodetails %}
+              {% if forloop.counter|divisibleby:3 %}
+                <div class="row">
+              {% endif %}
+               <div class="col-xs-6 col-sm-4 span12">
+                    <!-- <a href="book/{{book.isbn}}"><img class="center-block" src="{{x}}" alt="" style ="width:200px"/></a> -->
+                    {% for i in d %}
+                    <h3 class="text-center">{{i}}</h3>
+                    <!-- <h5 class="text-center">{{x}} &euro;</h5> -->
+                    <div class="clearfix"></div>
+                    {% endfor %}
+              </div>
+              {% if forloop.counter|divisibleby:3 %}
+                </div>
+                <div class="spacing">
+                  <br />
+                  <br />
+                </div>
+              {% endif %}
+            {% endfor %}
+
+
+           </div>
+         </div>
 				 </div>
 				 </div>
 			 </div>
