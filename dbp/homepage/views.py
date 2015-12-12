@@ -356,7 +356,7 @@ def checkout(request):
             qty = booklist[x][1]
             bookdetails.append([booktitle, bookauthor, bookisbn, bookprice, qty])
             bookimages.append(bookimg)
-            x+=1
+            print "bookdetails ", bookdetails
 
         # customer = Customers.objects.get(loginid=request.session["loginid"])
 
@@ -441,7 +441,7 @@ def checkout(request):
                 orders = cursor.fetchall()
                 cursor.close()
                 # create orders
-                order = Orders.objects.create(loginid=customer,order_date=str(datetime.now()),order_status="Pending Order")
+                order = Orders.objects.create(loginid=customer,order_date=str(datetime.now()),order_status="Payment Received")
                 oid = Orders.objects.filter(loginid=customer).order_by('-order_date')[0]
                 for isbn, qty in temp.iteritems():
                     isbnin = Books.objects.get(isbn=isbn)
@@ -449,9 +449,9 @@ def checkout(request):
 
                 #clean dictionary
                 print "temp ", request.session["orders"]
-                for key in request.session["orders"].keys():
-                    del request.session["orders"][key]
-                    print "temp after deletion ", temp
+                request.session["orders"].clear()
+                request.session.modified = True
+                print "temp after deletion ", temp
                 print "temp ", request.session["orders"]
 
                 return render(request,'user.html',{'user':user, 'orders':orders, 'feedbacks':feedbacks,'ratings':ratings,'login':login,'loginid':loginid})
