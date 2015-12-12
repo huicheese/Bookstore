@@ -7,7 +7,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <!DOCTYPE html>
 <html>
 <head>
-<title>Bookland - land of knowledge and wisdom</title>
+<title>B&N BOOKSTORE</title>
 <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -65,7 +65,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		 <div class="header-left">
 			 <div class="top-menu">
 				 <ul>
-				 <li class="active"><a href="/homepage/">HOME</a></li>
+				 <li><a href="/homepage/">B&N BOOKSTORE</a></li>
 				 </ul>
 				 <!-- script-for-menu -->
 				 <script>
@@ -113,30 +113,15 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
   </script>
 </head>
 <body>
- <div class="slider">
+ <div class="slider" style="height: 80%; width: 80%; margin-left: auto; margin-right: auto; background-color: #eeeeee">
 	  <div class="callbacks_container">
 	     <ul class="rslides" id="slider">
 	         <li>
-				  <img src="http://www.googledrive.com/host/0B29ma7grVtkQc2VwblhsSkU4c2M/bnr.jpg" alt="">
-				  <div class="banner-info">
-				  <h3>FASHIONS</h3>
-				  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. consectetur adipiscing elit. consectetur adipiscing elit.</p>
-				  </div>
+				  <img src="http://i.imgur.com/gA20NtC.png" alt="">
 	         </li>
 	         <li>
-				 <img src="http://www.googledrive.com/host/0B29ma7grVtkQc2VwblhsSkU4c2M/bnr2.jpg" alt="">
-	        	 <div class="banner-info">
-	        	 <h3>MODELING</h3>
-	          	 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. consectetur adipiscing elit. consectetur adipiscing elit.</p>
-				 </div>
+				 <img src="http://i.imgur.com/UEEig2s.png" alt="">
 			 </li>
-	         <li>
-	             <img src="http://www.googledrive.com/host/0B29ma7grVtkQc2VwblhsSkU4c2M/bnr3.jpg" alt="">
-	        	 <div class="banner-info">
-	        	 <h3>FASHIONS</h3>
-	          	 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. consectetur adipiscing elit. consectetur adipiscing elit.</p>
-				 </div>
-	         </li>
 	      </ul>
 	  </div>
   </div>
@@ -144,11 +129,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <div class="tab-section">
 	 <div class="wrap">
 		 <div id="horizontalTab">
-		 		<a href="advsearch"><button type="button" class="btn btn-primary">Filters</button></a>
+		 		<a href="advsearch"><button type="button" class="btn btn-primary">Search</button></a>
 			   <ul class="resp-tabs-list">
-					<li><a href="#">FEATURED</a></li>
-<!-- 					<li class="active"><a href="#">JUST ARRIVED</a></li>
-					<li><a href="#">SALE</a></li> -->
+					<li><h2><a href="#">FEATURED</a></h2></li>
+          <br/>
 					<div class="clearfix"></div>
 			   </ul>
 			   <div class="resp-tabs-container">
@@ -164,7 +148,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						 <div class="col-xs-6 col-sm-4 span12">
 							    	<a href="book/{{book.isbn}}"><img class="center-block" src="{{book.picture}}" alt="" style ="width:200px"/></a>
 									<h3 class="text-center">{{book.title}}</h3>
-									<h5 class="text-center">{{book.price}} &euro;</h5>
+									<h5 class="text-center">$ {{book.price}} </h5>
 									<div class="clearfix"></div>
 						</div>
 						{% if forloop.counter|divisibleby:3 %}
