@@ -1,0 +1,469 @@
+
+
+Database Project Report
+-----------------------
+
+1000500 | Tan Yi Xiang Marcus 
+1000607 | Muhammad Hatib Bin Abdul Aziz
+1000632 | Yong Ching Yan
+1000644 | Tiang Hui Hui
+1000727 | Lee Dabin
+
+
+ER Diagram
+----------
+![enter image description here](http://i.imgur.com/beAjho3.png)
+
+Relational Schema
+-----------------
+
+    create table books(
+    ISBN char(15),
+    title char(50) not null,
+    authors char(100) not null,
+    publisher char(50) not null,
+    yearPublished int not null,
+    stock int not null,
+    price float not null,
+    format ENUM('Hardcover','Softcover'),
+    keywords char(100),
+    subject char(100),
+    primary key(ISBN)
+    );
+
+    create table customers(
+    fullName char(100) not null,
+    loginID char(30),
+    pw char(50) not null,
+    majorCCN char(19),
+    address char(100) not null,
+    phoneNum char(25),
+    primary key (loginID)
+    );
+
+    create table orders(
+    oid char(30),
+    loginID char(30),
+    ISBN char(15) not null,
+    qty int not null,
+    order_date time not null,
+    order_status char(30) not null,
+    primary key (ISBN, oid),
+    foreign key (ISBN) references books(ISBN),
+    foreign key (loginID) references customers(loginID)
+    );
+
+    create table feedback(
+    loginID char(30) not null,
+    ISBN char(15) not null,
+    review ENUM ('0','1','2','3','4','5','6','7','8','9','10'),
+    optionalComment text,
+    feedback_date time not null,
+    primary key(loginID, ISBN),
+    foreign key (loginID) references customers(loginID),
+    foreign key (ISBN) references books(ISBN)
+    );
+
+    create table ratings(
+    ISBN char(15),
+    feedbackID char(30),
+    ratingID char(30),
+    rating ENUM ('0','1','2'),
+    primary key (ISBN, feedbackID, ratingID),
+    foreign key (feedbackID) references feedback(loginID),
+    foreign key (ratingID) references customers(loginID),
+    foreign key (ISBN) references feedback(ISBN)
+    );
+
+
+
+SQL - Functions
+---------------
+
+*Check for uniqueness of ID*
+
+    select case when exists(select * from customers where loginID="requested user name" limit 1) then cast(1 as bit) else cast(0 as bit) end
+
+*Registration of a new user*
+
+    insert into customers values (fullname, loginID, pw, majorCCN, address, phoneNum)
+
+*Ordering: After registration, a user can order one or more books. A user may order multiple copies of a book, one or more times. (The charging of the credit card and the shipment of the books are outside the scope of this project).*
+
+*Orders table*
+
+    insert into orders(loginID, order_date,order_status) values ('mhatib',datetime('now'),'Pending Order');
+
+*Order_items table*
+
+    insert into order_items values ((select oid from orders where order_date=(select MAX(order_date) from orders) and loginID=’loginID’'),'978-0253009081',5)
+
+*User record: upon user demand, you should print the full record of a user his/her account information*
+
+    select * from customers where loginID=’loginID’ limit 1
+
+*his/her full history of orders*
+
+    select * from hasOrders where loginID='loginID' 
+
+*list of all feedbacks he/she ranked with respect to usefulness*
+
+    select * from ratings where ratingID=’loginID’
+
+*his/her full history of feedbacks*
+
+    select * from feedback where loginID='loginID'
+
+*New book: The store manager records the details of a new book, along with the number of new books that have arrived in the warehouse.*
+
+    insert into books VALUES ('ISBN','title','author','publisher', 1999, 9, 99, 'Hardcover', 'keyword', 'subject', 'https://url_to_book_image’)
+
+*Arrival of more copies: The store manager increases the number of copies in inventory.*
+
+    update books set stock=3 where ISBN='ISBN'
+
+*Feedback recordings: Users can record their feedback for a book. You should record the date, the numerical score (0= terrible, 10= wonderful), and an optional short text. No changes are allowed; only one feedback per user per book is allowed.*
+
+    insert into feedback VALUES (‘loginID’,'ISBN','5',’optional_comments’,’20120618 10:34:09 AM‘)
+
+*Usefulness ratings: Users can assess other uses’ feedback, give a numerical score 0, 1, or 2 (’useless’, ’useful’, ’very useful’ respectively). A user is not allowed to rate his/her own feedback.*
+
+    insert into ratings values (‘ISBN’,’feedbackID’,’ratingID’,1)
+
+*Book Browsing: Users may search for books, by asking conjunctive queries on the authors, and/or publisher, and/or title, and/or subject. Your system should allow the *user to specify that the results are to be sorted by*
+*1. year*
+*2. the average score of the feedbacks.*
+
+*By year*
+
+    select *  from books where title like ‘%title_key%’ or authors like ‘%author_key%” or  publisher or ‘%publisher_key%” or subject like “%subject_key%” Order by yearPublished ASC
+
+*By average score of the feedbacks*
+
+    SELECT * FROM Books INNER JOIN (SELECT avg(review) A, ISBN FROM feedbacks GROUP BY ISBN) T ON Books.ISBN=T.ISBN WHERE Books.subject LIKE %subject% OR Books.title LIKE %title% OR Books.authors LIKE %authors% OR Books.publisher LIKE %publisher% ORDER BY T.A ASC"
+
+*Useful feedbacks: For a given book, a user could ask for the top n most ‘useful’ feedbacks. The value of n is user-specified (say, 5, or 10). The ‘usefulness’ of a feedback is its average ‘usefulness’ score.*
+
+    select * from feedbacks where (ISBN = '978-0345803481') AND loginID IN (select feedbackID from (select * from ratings where ISBN='978-0345803481') group by feedbackID ORDER BY avg(rating) DESC LIMIT 5) 
+
+*Book recommendation: Like most e-commerce websites, when a user orders a copy of book ‘A’, your system should give a list of other suggested books. Book ‘B’ is suggested, if there exist a user ‘X’ that bought both ‘A’ and ‘B’. The suggested books should be sorted on decreasing sales count (i.e., most popular first); count only sales to users like ‘X’ (i.e. the users who bought both ‘A’ and ‘B’).*
+
+    select ISBN,sum(qty) from (select * from order_items inner join orders where order_items.oid=orders.oid and orders.order_status='Payment Received' and loginID<>'mhatib') inner join (select loginID as idl from order_items inner join orders where order_items.oid = orders.oid and orders.order_status='Payment Received' and loginID<>'mhatib' and ISBN='978-0253009081') group by ISBN order by sum(qty) DESC limit 1
+
+*Statistics: Every month, the store manager wants:*
+*1. the list of the m most popular books (in terms of copies sold in this month)* 
+*2. the list of m most popular authors* 
+*3. the list of m most popular publishers*
+
+*list of the m most popular books (in terms of copies sold in this month =k)*
+
+    select ISBN, sum(qty) from order_items inner join orders where order_items.oid = orders.oid and orders.order_status='Payment Received' group by ISBN order by sum(qty) DESC limit m
+
+*list of m most popular authors* 
+
+    select authors, sum(sqt) from (select ISBN as tis, sum(qty) as sqt from order_items inner join orders where order_items.oid = orders.oid and orders.order_status='Payment Received' group by ISBN order by sum(qty)) as a inner join books where tis=books.ISBN group by authors order by sum(sqt) DESC limit m
+
+*list of m most popular publishers*
+
+    select publisher, sum(sqt) from (select ISBN as tis, sum(qty) as sqt from order_items inner join orders where order_items.oid = orders.oid and orders.order_status='Payment Received' group by ISBN order by sum(qty)) as a inner join books where tis=books.ISBN group by publisher order by sum(sqt) DESC limit m
+
+
+Implementation Details
+======================
+
+Admin Function
+--------------
+
+The Admin function on “homepage/admin” shows useful statistics such as most popular books, authors and publishers for the administrator of the website. By passing an integer value as an argument in the GET requests `(GET homepage/admin?Resultsm=5)`, user can freely control the number of statistical results displayed on the page. By replacing *Resultm* with the user specified value, the following queries can limit their output to user's desired value. The following queries return most popular books, authors and publishers by grouping each entities according to appropriate sorting attribute.
+        
+    cursor.execute("SELECT books.title, order_items.isbn AS isbn, sum(order_items.qty) FROM books,order_items,orders WHERE order_items.oid = orders.oid AND orders.order_status=%s AND books.isbn = order_items.isbn group by order_items.isbn order by sum(order_items.qty) DESC LIMIT %s",["Payment Received",str(Resultm)])
+        
+    cursor.execute("SELECT books.authors, SUM(sqt) from (SELECT ISBN as tis, SUM(order_items.qty) as sqt from order_items INNER JOIN orders WHERE order_items.oid = orders.oid AND orders.order_status=%s GROUP BY ISBN ORDER BY SUM(qty)) as a INNER JOIN books where tis=books.ISBN GROUP BY books.authors ORDER BY SUM(sqt) DESC LIMIT %s",["Payment Received",str(Resultm)])
+        
+    cursor.execute("SELECT books.publisher, sum(sqt) from (SELECT ISBN as tis, sum(order_items.qty) as sqt from order_items INNER JOIN orders WHERE order_items.oid = orders.oid AND orders.order_status=%s group by ISBN order by sum(qty)) as a inner join books where tis=books.ISBN group by books.publisher order by SUM(sqt) DESC limit %s",["Payment Received",str(Resultm)])
+
+
+Registration Function
+---------------------
+
+The registration function allows users to create a new account with our site. It requires 7 fields with varying degrees of regex to ensure that they are valid, which eliminates the need to check at the database level. Once the users attempt to submit, the system checks if there is a `loginID` with that username by using the django filter:
+
+    q = Customers.objects.filter(loginid=login)
+
+If the `loginid` is available, which means q is empty, then the fields are read and a new tuple is inserted into the database, again using the django methods:
+
+    fullname = regform.cleaned_data['fullname']
+    login = regform.cleaned_data['loginid']
+    pw = regform.cleaned_data['pw']
+    cfmpw = regform.cleaned_data['cfmpw']
+    majorccn = regform.cleaned_data['majorccn']
+    address = regform.cleaned_data['address']
+    phonenum = regform.cleaned_data['phonenum']
+
+    p = Customers(fullname = fullname, loginid = login, pw =pw, majorccn = majorccn, address = address, phonenum = phonenum)
+    p.save()
+
+`p.save()` is essentially the django version of an INSERT statement with p containing the column names and corresponding values to be inserted.
+
+
+
+Login Function
+--------------
+
+Login function allows registered users to login to the page. The URL is at homepage/login. User inputs the username and password that was registered before and is able to login to the site. Upon successful registration, the page will redirect to the homepage, otherwise it will reload the login page to allow users to re-attempt login again. 
+
+Login function does not use raw SQL function, instead it goes through the django implementation to access database tuples. Django is able to check that the field are entered when we create the fields using a django form with: 
+    
+    if form.is_valid():
+
+If it is valid, we then read the values and check if such a user exists in the Customers table with a django filter
+
+    login = form.cleaned_data['login']
+	pw = form.cleaned_data['pw']
+    q = Customers.objects.filter(loginid=login)
+
+q returns the database tuple of the user with the specific `loginid` entered. We also implemented the usage of sessions to track the user interactions with the site.   
+
+    request.session["loginid"] = login
+    request.session["login"]= True
+    request.session["orders"] = dict()
+    request.session.set_expiry(3000)
+    return HttpResponseRedirect('/homepage/')
+
+
+User Function
+-------------
+
+The user profile page on "homepage/user" is used to display the user's personal information, a list of all their previous purchases, the feedbacks they've left on books and the ratings they have given to other user's feedback.
+
+We use django's in-built session tokens to keep track of which user is logged in at the moment. There are two values stored in the request session tokens:
+
+	login = request.session["login"] 
+    loginid = request.session["loginid"]
+	
+login keeps track if the user is logged or not and loginid  keeps track of the users' id. Once a user logs out, everything that is stored in request.session will be clear.
+
+The user page uses both django sql and raw sql to obtain user information for display.
+
+For the personal information:
+
+	user = Customers.objects.filter(loginid=loginid).values()[0]
+
+For the lists of orders:
+
+	cursor.execute("SELECT orders.oid, books.title, order_items.qty, orders.order_date, orders.order_status FROM books,orders,order_items WHERE orders.loginID = %s AND orders.oid = order_items.oid AND order_items.ISBN = books.ISBN",[loginid])
+       
+	
+For the feedback:
+
+	cursor.execute("SELECT books.title, feedbacks.review, feedbacks.optionalComment FROM books,feedbacks WHERE feedbacks.loginID = %s AND books.ISBN = feedbacks.ISBN",[loginid])
+       
+For the ratings:
+
+	cursor.execute("SELECT books.title, ratings.feedbackID, ratings.rating FROM books,ratings WHERE ratings.ratingID = %s AND books.ISBN =ratings.ISBN order by ratings.rating DESC",[loginid])
+       
+Book Function
+--------------
+
+The book page at "homepage/book" fetches different books based on the isbn number at the back of the url. 
+
+For example "homepage/book/978-1118380987" will fetch the book with 978-1118380987 as its ISBN number.
+
+To fetch the book information we use:
+
+	q = Books.objects.filter(isbn=isbn)
+
+To process an order:
+
+We first check if the user is logged in, we then make sure that the quantity ordered is positive and lesser than the stock left for that book. If the conditions match, we will add the order to request.session["orders"], a dictionary that stores the book isbn as key and the quantity as the value. If the isbn is already in the order we will update the value the to the sum of the quantities ordered.
+
+This order dictionary will be used later by checkout. 
+
+    if "loginid" in request.session:
+        qty = bookform.cleaned_data['qty']
+        book = Books.objects.get(isbn=isbn)
+        print ('Processing order')
+
+        temp = request.session["orders"]
+        if isbn in temp:
+            temp[isbn] = temp[isbn]+qty
+        else:
+            temp[isbn]= qty
+
+        if temp[isbn] > book.stock:
+            print 'Insufficient Stock!'
+        else:
+            print temp
+            request.session["orders"] = temp
+            return HttpResponseRedirect('/homepage/checkout')
+    else:
+        print ('Login to order')
+
+To post a feedback:
+
+We first check if the user is logged in, then we get the feedback and the comment from the feedback form an insert it into the database.
+
+    review = feedbackform.cleaned_data['feedback']
+    comment = feedbackform.cleaned_data['comment']
+    customer = Customers.objects.get(loginid=request.session["loginid"])
+    book = Books.objects.get(isbn=isbn)
+    f = Feedbacks(loginid=customer, isbn=book, review=review, optionalcomment=comment, feedback_date=str(datetime.now()))
+    f.save()
+	
+To post a rating:
+
+    rating = request.POST['rating']
+    ratingid = Customers.objects.get(loginid=request.session['loginid'])
+    feedbackid = Customers.objects.get(loginid=request.POST['loginid'])
+    book = Books.objects.get(isbn=isbn)
+    p = Ratings(isbn=book,feedbackid=feedbackid,ratingid=ratingid,rating=rating)
+    p.save()
+
+To display the top few feedbacks, the user selects from a list the number of feedbacks desired and clicks on the filter button. This then runs an additional RAW sql query where num is the number of feedbacks the user has chosen:
+
+    viewform = ViewForm(viewdefault)
+    cursor.execute("SELECT feedbacks.loginID, feedbacks.review, feedbacks.optionalComment from feedbacks where (feedbacks.ISBN = %s) AND feedbacks.loginID IN (select feedbackID from (select * from ratings where ratings.ISBN=%s) group by feedbackID ORDER BY avg(rating) DESC LIMIT %s)",[isbn,isbn,num])
+    views = cursor.fetchall()
+    cursor.close()
+This will populate a separate table that will show the selected data.
+
+Checkout Function
+-----------------
+
+Checkout function is for users to confirm what they would like to purchase. The URL can only be seen by users after they have logged in. If they are not logged in, they would be prompted to login first. Upon successful checkout, they would be redirected to their own user page, to look at what they have ordered. By default, once a user checks out, it would be marked as “Payment received” as we do not have the mechanisms to simulate different states of order. In order to keep track of all the books the user have “Add to cart”, we used Django’s in built request.session to store a temporary dictionary of books that the user is interested in before checkout. 
+
+    temp = request.session[“orders”]
+
+With the `temp` dictionary, we now have a list of ISBNs and quantity of a particular ISBN.With all the ISBNs, we need to get a list version of temp to easily manipulate the data.We also need to get a list, which is called bookdetails in this case, to list out the title, authors, price, isbn and picture of the books to be displayed on the checkout page. 
+
+
+
+At this stage, the user can choose to confirm his/her orders by checking out or remove his/her orders from the list. 
+
+To ensure that the system knows which book the user is removing, there is a hidden form which contains the isbn and the quantity of the book in the Remove button. Hence, when the remove button is click, a `POST` request is sent to the server to remove the particular book.
+ 
+If the user removed the book, we would then remove the particular book, using its ISBN, from `temp` (to remove the isbn and respective qty from the request.session function), `booklist` (to remove the list of isbn and qty) and `bookdetails` (to prevent it from being listed on the shopping cart). 
+
+    if 'bookrmv' in request.POST:
+	    login = request.session["login"]
+            loginid = request.session["loginid"]
+            removeform = removeForm(request.POST)
+                if removeform.is_valid():
+                    bookdata = removeform.cleaned_data['remove']
+        # get from the form which is the book that is going to be removed
+                    booktoremove = request.POST['bookrmv']
+                    # convert unicode to list
+                    booktoremove = ast.literal_eval(booktoremove)
+                    print "booktoremove ", booktoremove, type(booktoremove)
+                if bookdata == False:
+                    if booktoremove in bookdetails:
+                        bookdetails.remove(booktoremove)
+                        del temp[booktoremove[2]]
+                        for i in booklist:
+                           if booktoremove[2] == i[0]:
+                               booklist.remove(i)
+                        request.session.modified = True
+                        else:
+                            print "nope"
+                    else:
+                            print "nothing"
+
+As Django can’t store the updates in the request.session if the user is in the same function, in this case, the checkout function, and hence no matter how we delete the book to be removed from temp, it will not be deleted. Hence, we need to add in one more line, `request.session.modified = True` to tell Django that we are updating sessions, even though we are still in the same function. 
+
+Else, if the user decides to confirm his/her orders, he/she will press the checkout button, and it would then create an order in the `Orders` table:
+
+    order = Orders.objects.create(loginid=customer,order_date=str(datetime.now()),order_status="Payment Received")
+
+With the order created, we will then access the order to get the `oid`, which:
+
+     oid = Orders.objects.filter(loginid=customer).order_by('-order_date')[0]
+
+With the oid, we can now create an orderitem in the `OrderItems` table:
+
+     OrderItems.objects.create(oid= oid, isbn = isbnin, qty = qty)
+
+With that, we can now keep track of both the books ordered and the shipping status. 
+
+After the checkout, we can remove all the books in the temp dictionary as well, so that the books that have already been ordered will not appear on the page again and cause a double order: 
+
+    request.session["orders"].clear()
+    request.session.modified = True
+
+
+
+
+Registration Function
+---------------------
+
+The registration function allows users to create a new account with our site. It requires 7 fields with varying degrees of regex to ensure that they are valid, which eliminates the need to check at the database level. Once the users attempt to submit, the system checks if there is a `loginID` with that username by using the django filter:
+
+    q = Customers.objects.filter(loginid=login);
+
+If the `loginid` is available, which means q is empty, then the fields are read and a new tuple is inserted into the database, again using the django methods:
+
+    fullname = regform.cleaned_data['fullname']
+    login = regform.cleaned_data['loginid']
+    pw = regform.cleaned_data['pw']
+    cfmpw = regform.cleaned_data['cfmpw']
+    majorccn = regform.cleaned_data['majorccn']
+    address = regform.cleaned_data['address']
+    phonenum = regform.cleaned_data['phonenum']
+  
+    p = Customers(fullname = fullname, loginid = login, pw =pw, majorccn = majorccn, address = address, phonenum = phonenum)
+    p.save()
+
+`p.save()` is essentially the django version of an INSERT statement with p containing the column names and corresponding values to be inserted.
+
+    request.session.modified = True
+
+Advanced Search Function
+------------------------
+
+The advanced search function is used when the user goes to “homepage/advsearch”. From there, the user would be able to pass in his or her search parameters, for instance, the book’s title, author, subject and publisher, by filling up a form. The search parameters are saved in the session so that when the user wants to perform a sorting action, these search parameters can be reused to perform that query.
+
+    if form.is_valid():
+            authors = form.cleaned_data['authors'].lstrip()
+            publisher = form.cleaned_data['publisher'].lstrip()
+            title = form.cleaned_data['title'].lstrip()
+            subject = form.cleaned_data['subject'].lstrip()
+            request.session['authors']=authors
+            request.session['publisher']=publisher
+            request.session['title']=title
+            request.session['subject']=subject
+
+Based on these parameters, an sql query will be called to search for a book that fulfills these parameters in its attributes. The result of this query will then be passed to the html so that the books that fulfill the criteria will be displayed, as can be seen in the return statement. The returned result is passed to the “results” html as the variable `booklist`.
+
+    if "login" in request.session and "loginid" in request.session:
+                    login = request.session["login"]
+                    loginid = request.session["loginid"]
+                    return render(request, 'results.html', {'form': form,'login':login,'loginid':loginid, 'booklist':q})
+
+    # If the user is not logged in, run this line of code instead
+            return render(request, 'results.html', {'form': form, 'booklist':q})
+
+After the results are returned to the user, the user can decide to sort the given list based on year, or by the book’s average score. When the user decides which scheme to sort the list by, this intent is passed back to Django as the variable name “sorting” so that the appropriate action can be taken.
+
+    if 'sorting' in request.POST:
+            sorter = request.POST['sorting']
+                
+
+Depending on the scheme that the user selected to sort by, these various lines will be run and the result of the query will be passed to the variable `booklist`.
+
+![enter image description here](http://i.imgur.com/pwMQIY2.png)
+
+For the sorting of the average score, an inner join between Books and a temporary table, T, is required, with T being `SELECT AVG(review) A, ISBN FROM Feedbacks GROUP BY ISBN`. This is because the average score of the book is not found in each of the Books entity.
+
+
+
+
+
+
+
+
+Screenshots
+-----------
+![enter image description here](http://i.imgur.com/BgG0uvQ.png)
+![enter image description here](http://i.imgur.com/vty2mzl.png)
+![enter image description here](http://i.imgur.com/VDTlnOc.png)
+![enter image description here](http://i.imgur.com/Fsf5ftc.png)
+![enter image description here](http://i.imgur.com/gaqC7xo.png)
