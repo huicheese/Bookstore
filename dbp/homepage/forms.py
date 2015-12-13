@@ -10,10 +10,10 @@ class loginform(forms.Form):
     pw = forms.CharField(label='Password', max_length=10, widget=forms.PasswordInput)
 
 class advsearchform(forms.Form):
-    authors = forms.CharField(label='Authors', widget=forms.TextInput(attrs={'class' : 'form-horizontal'}))
-    publisher = forms.CharField(label='Publisher')
-    title = forms.CharField(label='Title')
-    subject = forms.CharField(label='Subject')
+    authors = forms.CharField(label='Authors', widget=forms.TextInput(attrs={'class' : 'form-horizontal'}), required=False)
+    publisher = forms.CharField(label='Publisher', required=False)
+    title = forms.CharField(label='Title', required=False)
+    subject = forms.CharField(label='Subject', required=False)
 
 class RegForm(forms.Form):
     fullname = forms.CharField(label='Full Name', max_length=100)

@@ -77,7 +77,7 @@ def book(request,isbn):
 
 
             if bookform.is_valid():
-                if "loginid" in request.session:
+                if "loginid" in request.session and "login" in request.session:
                     qty = bookform.cleaned_data['qty']
                     book = Books.objects.get(isbn=isbn)
 
@@ -99,7 +99,7 @@ def book(request,isbn):
                         return HttpResponseRedirect('/homepage/checkout')
 
                 else:
-                    print ('Login to order')
+                    return HttpResponseRedirect('/homepage/login')
 
         #Else if it's a rating request
         else:
@@ -263,12 +263,12 @@ def advsearch(request):
             return render(request, 'results.html', {'booklist':q})
         # create a form instance and populate it with data from the request:
         form = advsearchform(request.POST)
-        # check whether it's valid:
+        # print form
         if form.is_valid():
-            authors = form.cleaned_data['authors'].lstrip()
-            publisher = form.cleaned_data['publisher'].lstrip()
-            title = form.cleaned_data['title'].lstrip()
-            subject = form.cleaned_data['subject'].lstrip()
+            authors = form.cleaned_data.get('authors').lstrip()
+            publisher = form.cleaned_data.get('publisher').lstrip()
+            title = form.cleaned_data.get('title').lstrip()
+            subject = form.cleaned_data.get('subject').lstrip()
             request.session['authors']=authors
             request.session['publisher']=publisher
             request.session['title']=title
@@ -283,7 +283,7 @@ def advsearch(request):
 
 
     else:
-        form = advsearchform(initial={'authors':' ', 'publisher':' ', 'title':' ', 'subject':' '})
+        form = advsearchform()
 
     if "login" in request.session and "loginid" in request.session:
         login = request.session["login"]
